@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_reset_to_test_db"
+        android:title="@string/menu_reset_to_test_db"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+    
+    <item android:id="@+id/menu_add_list"
+          android:title="@string/add_list"
+          android:showAsAction="always"
+            />
+</menu>

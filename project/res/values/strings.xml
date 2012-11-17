@@ -1,0 +1,20 @@
+<resources>
+
+    <string name="app_name">Shopping List</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_shopping_list_front">Shopping List</string>
+    <string name="front_existing_lists">Existing Lists</string>
+    <string name="test_db_name">testDb.db3</string>
+    <string name="menu_reset_to_test_db">Reset To Test DB</string>
+    <string name="add_list">Add List</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_shopping_list_items">Shopping List</string>
+    <string name="items">Items</string>
+    <string name="delete_list">Delete</string>
+    <string name="rename_list">Rename</string>
+    <string name="clone_list">Clone</string>
+    <string name="delete_item">Delete Item</string>
+    <string name="add_item">Add Item</string>
+    <string name="title_activity_shopping_list_item_details">Shopping List</string>
+
+</resources>

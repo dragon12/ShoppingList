@@ -1,0 +1,69 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical"
+    >
+
+
+    <LinearLayout
+        android:id="@+id/header_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <EditText
+            android:id="@+id/list_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/Blue"
+            android:padding="@dimen/padding_medium"
+            android:textColor="@android:color/white"
+            android:inputType="textCapSentences" 
+            android:selectAllOnFocus="true"
+            android:editable="false"
+            android:focusable="false"
+            />
+     
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/subheader_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+	    android:paddingLeft="10dp"
+	    android:paddingRight="10dp"
+    >
+        
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="Qty" />
+
+        <TextView
+            android:paddingLeft="30dp"
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Name" />
+        
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="Done?" />        
+            
+    </LinearLayout>
+     
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp" />
+        
+</LinearLayout>
+

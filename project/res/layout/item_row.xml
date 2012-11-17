@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    >
+    
+    
+    <TextView android:id="@+id/item_row_item_quantity"
+              android:textSize="15dp" 
+              android:layout_height="wrap_content"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:text="testQty"
+              android:gravity="right"
+              />
+    
+    <TextView android:id="@+id/item_row_item_name"
+              android:textSize="17dp" 
+              android:layout_height="wrap_content"
+              android:layout_width="0dp"
+              android:layout_weight="4"
+              android:paddingLeft="30dp"
+              android:text="testName"
+              />
+    
+    <CheckBox
+        android:id="@+id/item_row_item_complete"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        />
+    
+    <!-- 
+    <TextView android:id="@+id/list_row_list_date" 
+              android:layout_width="fill_parent" 
+              android:layout_height="wrap_content"
+              android:gravity="right"
+              android:text="testDate"
+              />-->
+    
+</LinearLayout>
+
+<!-- 
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:lines="1"
+        android:text="@+id/TextView01"
+        android:textSize="36dp" >
+
+    </TextView>
+    -->

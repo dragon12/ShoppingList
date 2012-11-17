@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="30dp"
+    >
+    
+    <TextView android:id="@+id/edit_item_display_name"
+              android:layout_alignParentLeft="true"
+              android:layout_alignParentTop="true"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="20dp"
+              android:text="Name: "
+              android:textSize="20dp"
+        />
+    <EditText android:id="@+id/edit_item_edit_name"
+              android:layout_alignParentRight="true"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:inputType="textNoSuggestions"
+              android:layout_alignBottom="@+id/edit_item_display_name"
+              android:layout_toRightOf="@+id/edit_item_display_name"
+              android:layout_marginLeft="30dp"
+              />
+
+    <!--  quantity row: label, editbox, spinner -->
+    <TextView android:id="@+id/edit_item_display_quantity"
+              android:layout_alignParentLeft="true"
+              android:layout_below="@+id/edit_item_display_name"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Quantity: "
+              android:textSize="20dp" 
+              android:layout_marginTop="20dp"
+              android:layout_marginBottom="20dp"
+              />
+    
+    <EditText android:id="@+id/edit_item_edit_quantity"
+              android:layout_width="100dp"
+              android:layout_height="wrap_content"
+              android:inputType="number"
+              android:layout_alignBottom="@+id/edit_item_display_quantity"
+              android:layout_alignLeft="@+id/edit_item_edit_name"
+              android:text="1"
+              android:selectAllOnFocus="true"
+              />
+    
+    <Spinner android:id="@+id/edit_item_edit_quantity_type"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+             android:layout_toRightOf="@+id/edit_item_edit_quantity"
+             android:layout_alignBottom="@+id/edit_item_display_quantity"
+             />
+        
+<!--     
+    <TextView android:id="@+id/edit_item_display_complete"
+              android:layout_marginTop="10dp"
+              android:layout_alignParentLeft="true"
+              android:layout_below="@+id/edit_item_display_quantity"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Complete: "
+              android:textSize="20dp"
+              />
+    
+    <CheckBox android:id="@+id/edit_item_edit_complete"
+              android:layout_alignParentRight="true"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignBottom="@+id/edit_item_display_complete"
+              android:layout_marginLeft="10dp"
+              />
+-->
+                            
+</RelativeLayout>
