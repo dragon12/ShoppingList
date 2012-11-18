@@ -24,7 +24,10 @@ public class DbTableLists extends DbTableBase {
 	public static final String COL_IS_COMPLETE = "is_complete";
 	public static final int COL_IDX_IS_COMPLETE = 3;
 	
-	public static final String[] Columns = {COL_ID, COL_NAME, COL_CREATION_DATE, COL_IS_COMPLETE};
+	public static final String COL_IS_DELETED = "is_deleted";
+	public static final int COL_IDX_IS_DELETED = 4;
+			
+	public static final String[] Columns = {COL_ID, COL_NAME, COL_CREATION_DATE, COL_IS_COMPLETE, COL_IS_DELETED};
 
 	public DbTableLists() {
 		super(TABLE_NAME);
@@ -73,8 +76,10 @@ public class DbTableLists extends DbTableBase {
 				"CREATE TABLE " + TABLE_NAME + "(" + 
 						COL_ID + " integer primary key autoincrement, " +
 						COL_NAME + " text not null, " +
-						COL_CREATION_DATE + " text DEFAULT (datetime('now','localtime')), " +
-						COL_IS_COMPLETE + " boolean DEFAULT false)";
+						COL_CREATION_DATE + " text not null DEFAULT (datetime('now','localtime')), " +
+						COL_IS_COMPLETE + " boolean not null DEFAULT false, " +
+						COL_IS_DELETED + " boolean not null DEFAULT false" +
+								")";
 		Log.i(ShoppingList.LOG_NAME, "Creating lists table with sql command: " + sql);
 		
 		db.execSQL(sql);

@@ -1,13 +1,10 @@
 package model;
 
-import android.util.Log;
-
-import com.android.gers.shopping.list.ShoppingList;
-
 public enum QuantityType {
-	UNITS("units", ""),
-	GRAMMES("g", "g"),
-	MILLILITRES("ml", "ml");
+	UNITS("units", "", true),
+	GRAMMES("g", "g", false),
+	MILLILITRES("ml", "ml", false),
+	PACKETS("packets", "pkts", true);
 	
 	public static QuantityType fromString(String text) {
 		if (text != null) {
@@ -22,28 +19,26 @@ public enum QuantityType {
 
 	private String name;
 	private String displayName;
+	private boolean requiresPluralisation;
 	
-	QuantityType(String name, String displayName) {
+	QuantityType(String name, String displayName, boolean requiresPluralisation) {
 		this.name = name;
 		this.displayName = displayName;
+		this.requiresPluralisation = requiresPluralisation;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getDisplayName() {
 		return displayName;
 	}
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public boolean getRequiresPluralisation() {
+		return requiresPluralisation;
 	}
-
+	 
 	@Override
 	public String toString() {
 		return getName();

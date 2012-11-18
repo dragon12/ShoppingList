@@ -4,28 +4,27 @@
     android:orientation="horizontal" 
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     >
-    
-    
-    <TextView android:id="@+id/item_row_item_quantity"
-              android:textSize="15dp" 
-              android:layout_height="wrap_content"
-              android:layout_width="0dp"
-              android:layout_weight="1"
-              android:text="testQty"
-              android:gravity="right"
-              />
-    
-    <TextView android:id="@+id/item_row_item_name"
-              android:textSize="17dp" 
-              android:layout_height="wrap_content"
-              android:layout_width="0dp"
-              android:layout_weight="4"
-              android:paddingLeft="30dp"
-              android:text="testName"
-              />
+    
+    <TextView
+        android:id="@+id/item_row_item_quantity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:text="testQty"
+        android:textSize="15dp"
+        tools:ignore="HardcodedText" />
+    
+    <TextView
+        android:id="@+id/item_row_item_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:paddingLeft="30dp"
+        android:text="testName"
+        android:textSize="17dp"
+        tools:ignore="HardcodedText" />
     
     <CheckBox
         android:id="@+id/item_row_item_complete"

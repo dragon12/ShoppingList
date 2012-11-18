@@ -82,6 +82,16 @@ public class ListDataSource {
 		return retVal;
 	}
 	
+	public void setAllListItemsCompleteState(long listId, Boolean newState) {
+		Log.i(ShoppingList.LOG_NAME, "Updating all items with list id " + listId + " to have new complete state " + newState.toString());
+		
+		ContentValues kvps = new ContentValues();
+		kvps.put(DbTableItems.COL_IS_COMPLETE, newState);
+		
+		dbHelper.updateByListId(db, listId, kvps);
+	}
+	
+	
 	public void deleteList(ShoppingListList deleteList) {
 		Log.i(ShoppingList.LOG_NAME, "About to delete this shopping list: " + deleteList.toString());
 		
@@ -166,7 +176,7 @@ public class ListDataSource {
 				cursor.getInt(DbTableItems.COL_IDX_ID),
 				cursor.getInt(DbTableItems.COL_IDX_LIST_ID),
 				cursor.getString(DbTableItems.COL_IDX_NAME),
-				cursor.getString(DbTableItems.COL_IDX_QUANTITY),
+				cursor.getInt(DbTableItems.COL_IDX_QUANTITY),
 				QuantityType.fromString(cursor.getString(DbTableItems.COL_IDX_QUANTITY_TYPE)),
 				cursor.getInt(DbTableItems.COL_IDX_IS_COMPLETE) > 0);
 	}

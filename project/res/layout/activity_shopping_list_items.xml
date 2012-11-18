@@ -1,38 +1,45 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
-    android:orientation="vertical"
     >
 
-
+    <!--  header (i.e. list name) -->
     <LinearLayout
         android:id="@+id/header_layout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        >
         
         <EditText
             android:id="@+id/list_name"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center_vertical|center_horizontal"
             android:background="@color/Blue"
             android:padding="@dimen/padding_medium"
             android:textColor="@android:color/white"
             android:inputType="textCapSentences" 
             android:selectAllOnFocus="true"
-            android:editable="false"
             android:focusable="false"
             />
-     
+        
     </LinearLayout>
     
+    <!-- headings -->
     <LinearLayout
         android:id="@+id/subheader_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
 	    android:paddingLeft="10dp"
 	    android:paddingRight="10dp"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/header_layout"
+	    android:paddingTop="10dp"
+	    android:paddingBottom="10dp"
     >
         
         <TextView
@@ -40,30 +47,150 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="Qty" />
+            android:text="@string/items_heading_quantity"
+            android:textStyle="bold"
+            android:textSize="18dp" 
+            />
 
         <TextView
             android:paddingLeft="30dp"
             android:layout_weight="4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Name" />
+            android:text="@string/items_heading_name" 
+            android:textStyle="bold"
+            android:textSize="18dp" 
+            />
         
         <TextView
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="Done?" />        
+            android:text="@string/items_heading_done"
+            android:textSize="18dp"
+            android:textStyle="bold" />
             
     </LinearLayout>
-     
-    <ListView
-        android:id="@android:id/list"
+    
+    <LinearLayout
+        android:id="@+id/top_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="test"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10.0sp" />
+        android:layout_below="@+id/subheader_layout"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#B8B8B8"
+            />
+            
+    </LinearLayout>
         
-</LinearLayout>
+<!-- the list view -->
 
+    <LinearLayout
+        android:id="@+id/list_layout"
+        android:layout_alignParentLeft="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/top_divider"
+        android:layout_above="@+id/bottom_divider"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+        
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0sp" 
+            />
+    </LinearLayout>
+        
+    <LinearLayout
+        android:id="@+id/bottom_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_layout"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#B8B8B8"
+            />
+            
+    </LinearLayout>
+        
+    <!-- bottom buttons -->
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="@dimen/padding_large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
+
+        <!-- android:layout_toLeftOf="@+id/select_deselect_all" -->
+        
+        <!-- left third -->
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/button_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/button_add_item" />
+        </RelativeLayout>
+
+        <!-- middle third -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/button_start_shop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/button_start_shop" />
+        </RelativeLayout>
+
+        <!-- right third -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/button_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/button_reset" />
+        </RelativeLayout>
+    </LinearLayout>
+    
+    <!-- 
+    <CheckBox
+        android:id="@+id/select_deselect_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/list_layout"
+        android:layout_alignTop="@+id/button_layout"
+        android:paddingRight="11dp"
+        />
+        -->
+    
+</RelativeLayout>

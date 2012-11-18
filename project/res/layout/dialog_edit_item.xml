@@ -11,17 +11,18 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginTop="20dp"
-              android:text="Name: "
+              android:text="@string/edit_item_label_name"
               android:textSize="20dp"
         />
     <EditText android:id="@+id/edit_item_edit_name"
               android:layout_alignParentRight="true"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:inputType="textNoSuggestions"
+              android:inputType="textCapSentences"
               android:layout_alignBottom="@+id/edit_item_display_name"
               android:layout_toRightOf="@+id/edit_item_display_name"
               android:layout_marginLeft="30dp"
+              android:selectAllOnFocus="true"
               />
 
     <!--  quantity row: label, editbox, spinner -->
@@ -30,7 +31,7 @@
               android:layout_below="@+id/edit_item_display_name"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="Quantity: "
+              android:text="@string/edit_item_label_quantity"
               android:textSize="20dp" 
               android:layout_marginTop="20dp"
               android:layout_marginBottom="20dp"
@@ -42,7 +43,7 @@
               android:inputType="number"
               android:layout_alignBottom="@+id/edit_item_display_quantity"
               android:layout_alignLeft="@+id/edit_item_edit_name"
-              android:text="1"
+              android:text="@string/edit_item_default_quantity"
               android:selectAllOnFocus="true"
               />
     

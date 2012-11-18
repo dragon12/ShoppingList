@@ -60,9 +60,9 @@ public class DbTableItems extends DbTableBase {
 						COL_ID + " integer primary key autoincrement, " +
 						COL_LIST_ID + " integer not null REFERENCES " + foreignTable + "(" + foreignColumn + ")," +
 						COL_NAME + " text not null, " +
-						COL_QUANTITY + " text not null, " +
+						COL_QUANTITY + " integer not null, " +
 						COL_QUANTITY_TYPE + " text not null, " +
-						COL_IS_COMPLETE + " boolean DEFAULT false)";
+						COL_IS_COMPLETE + " boolean not null DEFAULT false)";
 						
 		db.execSQL(sql);		
 	}
@@ -73,6 +73,10 @@ public class DbTableItems extends DbTableBase {
 	
 	public Boolean update(SQLiteDatabase db, long id, ContentValues kvps) {
 		return db.update(TABLE_NAME, kvps, COL_ID + " = " + id, null) == 1;
+	}
+	
+	public Boolean updateByListId(SQLiteDatabase db, long listId, ContentValues kvps) {
+		return db.update(TABLE_NAME, kvps, COL_LIST_ID + " = " + listId, null) >= 1;
 	}
 
 	public Cursor getItemById(SQLiteDatabase db, long id) {

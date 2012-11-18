@@ -2,24 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" 
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
-    
-    <TextView android:id="@+id/list_row_list_name"
-              android:textSize="14sp" 
-		      android:textStyle="bold" 
-		      android:textColor="@color/Yellow" 
-		      android:layout_width="wrap_content" 
-		      android:layout_height="wrap_content"
-		      android:text="testName"
-		      />
-    
-    <TextView android:id="@+id/list_row_list_date" 
-		      android:layout_width="fill_parent" 
-		      android:layout_height="wrap_content"
-		      android:gravity="right"
-              android:text="testDate"
-              />
+    android:layout_height="fill_parent" xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/list_row_list_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="testName"
+        android:textColor="@color/Yellow"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
+    
+    <TextView
+        android:id="@+id/list_row_list_date"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="testDate"
+        tools:ignore="HardcodedText" />
     
 </LinearLayout>
 

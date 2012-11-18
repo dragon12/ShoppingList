@@ -20,11 +20,12 @@
 	        tools:context=".ShoppingListFront" />
      
 	</LinearLayout>
-
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="test" />
+        android:text="test"
+        tools:ignore="HardcodedText" />
         
 </LinearLayout>

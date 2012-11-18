@@ -11,7 +11,7 @@ public final class ShoppingList {
 	
 	public static final class DB {
 		public static final String NAME = "ShoppingList";
-		public static final Integer VERSION = 1;
+		public static final Integer DB_VERSION = 2;
 	}
 	
 }

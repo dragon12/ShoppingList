@@ -19,7 +19,7 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 	private DebugDbHelper debugHelper;
 	
 	public ShoppingListDb(Context context) {
-		super(context, ShoppingList.DB.NAME, null, ShoppingList.DB.VERSION);
+		super(context, ShoppingList.DB.NAME, null, ShoppingList.DB.DB_VERSION);
 
 		dbTableLists = new DbTableLists();
 		dbTableItems = new DbTableItems(DbTableLists.TABLE_NAME, DbTableLists.COL_ID);
@@ -61,6 +61,10 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 	
 	public Boolean updateItem(SQLiteDatabase db, long id, ContentValues kvps) {
 		return dbTableItems.update(db, id, kvps);
+	}	
+	
+	public Boolean updateByListId(SQLiteDatabase db, long listId, ContentValues kvps) {
+		return dbTableItems.updateByListId(db, listId, kvps);
 	}
 
 	public Cursor getAllLists(SQLiteDatabase db, Boolean noComplete) {

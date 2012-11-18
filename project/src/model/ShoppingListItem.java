@@ -4,7 +4,7 @@ public class ShoppingListItem {
 	private long id;
 	private long listId;
 	private String name;
-	private String quantity;
+	private Integer quantity;
 	private QuantityType quantityType;
 	private Boolean complete;
 	
@@ -18,7 +18,7 @@ public class ShoppingListItem {
 			if (	id == item.id
 				 && listId == item.listId
 				 && name.equals(item.name)
-				 && quantity.equals(item.quantity)
+				 && quantity == item.quantity
 				 && quantityType.equals(item.quantityType)
 				 && complete.equals(item.complete)
 			    )
@@ -30,11 +30,11 @@ public class ShoppingListItem {
 		return false;
 	}
 
-	public ShoppingListItem(long listId, String name, String quantity, QuantityType quantityType, Boolean complete) {
+	public ShoppingListItem(long listId, String name, int quantity, QuantityType quantityType, Boolean complete) {
 		this(-1, listId, name, quantity, quantityType, complete);
 	}
 
-	public ShoppingListItem(long id, long listId, String name, String quantity, QuantityType quantityType, Boolean complete) {
+	public ShoppingListItem(long id, long listId, String name, int quantity, QuantityType quantityType, Boolean complete) {
 		this.id = id;
 		this.listId = listId;
 		this.name = name;
@@ -59,14 +59,23 @@ public class ShoppingListItem {
 		this.listId = listId;
 	}
 
-	public String getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(String quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
+	public String getDisplayName() {
+		if (getQuantityType().getRequiresPluralisation() && getQuantity() > 1) {
+			if (!getName().endsWith("s")) {
+				return getName() + "s";
+			}
+		}
+		return getName();
+	}
+	
 	public String getName() {
 		return name;
 	}

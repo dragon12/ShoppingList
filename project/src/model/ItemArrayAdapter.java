@@ -4,10 +4,7 @@ import java.util.List;
 
 import com.android.gers.shopping.list.ListViewCheckBoxListener;
 import com.android.gers.shopping.list.R;
-import com.android.gers.shopping.list.ShoppingList;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,7 +44,6 @@ public class ItemArrayAdapter extends ArrayAdapter<ShoppingListItem> {
 		 * Therefore, i refers to the current Item object.
 		 */
 		ShoppingListItem i = shoppingListItems.get(position);
-		Log.i(ShoppingList.LOG_NAME, String.format("dealing with position %d, item %s", position, i.toString()));
 		if (i != null) {
 
 			// This is how you obtain a reference to the TextViews.
@@ -63,15 +59,12 @@ public class ItemArrayAdapter extends ArrayAdapter<ShoppingListItem> {
 			}
 			
 			if (itemName != null){
-				Boolean pluralRequired = (i.getQuantityType() == QuantityType.UNITS && !i.getName().endsWith("s"));
-				itemName.setText(i.getName() + (pluralRequired ? "s" : ""));
+				itemName.setText(i.getDisplayName());
 			}
 			
 			if (itemComplete != null) {
-				Log.i(ShoppingList.LOG_NAME, "before itemComplete.setChecked(" + i.getComplete() + ")");
 				itemComplete.setChecked(i.getComplete());
-				Log.i(ShoppingList.LOG_NAME, "after itemComplete.setChecked(" + i.getComplete() + ")");
-
+		
 				final int thisPosition = position;
 				itemComplete.setOnClickListener(new OnClickListener() {
 					
