@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.android.gers.shopping.list.ShoppingList;
@@ -52,6 +53,16 @@ public class ListDataSource {
 		queryCursor.close();
 		return retVal;
 	}
+
+	public Boolean updateList(ShoppingListList editList) throws Exception {
+		Log.i(ShoppingList.LOG_NAME, "Updating list: " + editList.toString());
+		
+		ContentValues kvps = shoppingListListToContentValues(editList);
+		Boolean retVal = dbHelper.updateList(db, editList.getId(), kvps);
+		
+		Log.i(ShoppingList.LOG_NAME, "Updated list");
+		return retVal;
+	}
 	
 	public ShoppingListItem createItem(ShoppingListItem newItem) throws Exception {
 		Log.i(ShoppingList.LOG_NAME, "Inserting new item: " + newItem.toString());
@@ -86,7 +97,7 @@ public class ListDataSource {
 		Log.i(ShoppingList.LOG_NAME, "Updating all items with list id " + listId + " to have new complete state " + newState.toString());
 		
 		ContentValues kvps = new ContentValues();
-		kvps.put(DbTableItems.COL_IS_COMPLETE, newState);
+		kvps.put(DbTableItems.COL_IS_COMPLETE, newState ? 1 : 0);
 		
 		dbHelper.updateByListId(db, listId, kvps);
 	}
@@ -123,6 +134,34 @@ public class ListDataSource {
 		
 		return lists;
 	}
+	
+	public HashMap<Long, ShoppingListItemStats> getShoppingListItemStats() {
+		HashMap<Long, ShoppingListItemStats> stats = new HashMap<Long, ShoppingListItemStats>();
+		
+		Cursor queryCursor = dbHelper.getShoppingListItemStats(db);
+		
+		queryCursor.moveToFirst();
+		while(!queryCursor.isAfterLast()) {
+			long listId = queryCursor.getLong(DbTableItems.COL_QUERY_STATS_LIST_ID);
+			int completeStatus = queryCursor.getInt(DbTableItems.COL_QUERY_STATS_COMPLETE_STATUS);
+			int statusCount = queryCursor.getInt(DbTableItems.COL_QUERY_STATS_COUNT_STATUS);
+			
+			ShoppingListItemStats stat = stats.get(listId);
+			if (stat == null) {
+				stat = new ShoppingListItemStats(listId);
+				stats.put(stat.listId, stat);
+			}
+			if (completeStatus == 0) {
+				stat.numIncomplete = statusCount;
+			} else {
+				stat.numComplete = statusCount;
+			}
+			queryCursor.moveToNext();
+		}
+		queryCursor.close();
+		
+		return stats;
+	}
 
 	public ShoppingListList getShoppingList(long id) {
 		Cursor queryCursor = dbHelper.getListById(db, id);
@@ -152,6 +191,15 @@ public class ListDataSource {
 		
 		return items;
 	}
+
+	private static ContentValues shoppingListListToContentValues(ShoppingListList list) {
+		ContentValues kvps = new ContentValues();
+		kvps.put(DbTableLists.COL_NAME, list.getName());
+		kvps.put(DbTableLists.COL_CREATION_DATE, list.getCreationDate());
+		kvps.put(DbTableLists.COL_IS_COMPLETE, list.getComplete() ? 1 : 0);
+		kvps.put(DbTableLists.COL_IS_DELETED, list.getDeleted() ? 1 : 0);
+		return kvps;
+	}
 	
 	private static ContentValues shoppingListItemToContentValues(ShoppingListItem item) {
 		ContentValues kvps = new ContentValues();
@@ -159,7 +207,7 @@ public class ListDataSource {
 		kvps.put(DbTableItems.COL_NAME, item.getName());
 		kvps.put(DbTableItems.COL_QUANTITY, item.getQuantity());
 		kvps.put(DbTableItems.COL_QUANTITY_TYPE, item.getQuantityType().toString());
-		kvps.put(DbTableItems.COL_IS_COMPLETE, item.getComplete());
+		kvps.put(DbTableItems.COL_IS_COMPLETE, item.getComplete() ? 1 : 0);
 		return kvps;
 	}
 	
@@ -168,7 +216,9 @@ public class ListDataSource {
 				cursor.getInt(DbTableLists.COL_IDX_ID), 
 				cursor.getString(DbTableLists.COL_IDX_NAME),
 				cursor.getString(DbTableLists.COL_IDX_CREATION_DATE),
-				cursor.getInt(DbTableLists.COL_IDX_IS_COMPLETE) > 0);
+				cursor.getInt(DbTableLists.COL_IDX_IS_COMPLETE) > 0,
+				cursor.getInt(DbTableLists.COL_IDX_IS_DELETED) > 0
+				);
 	}
 
 	private static ShoppingListItem cursorToShoppingListItem(Cursor cursor) {

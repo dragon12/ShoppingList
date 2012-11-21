@@ -1,0 +1,15 @@
+_id,list_id,name,quantity,quantity_type,is_complete
+1,1,test_item 1,500,units,0
+2,1,test item 2,1,packets,0
+3,1,test_item_3,5,ml,1
+4,3,Flour,2000,g,0
+5,3,Eggs,1,packets,0
+6,3,Butter,200,g,1
+7,3,Bacon,10,units,0
+8,3,Very very very long long item,1,packets,0
+9,3,Cake,2,units,1
+10,3,Bread,1,packets,0
+11,3,Coffee,200,g,1
+12,3,Spinach,2,packets,0
+13,3,Mushrooms,500,g,0
+14,3,Fruit,5,units,0

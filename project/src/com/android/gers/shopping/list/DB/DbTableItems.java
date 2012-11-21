@@ -37,6 +37,11 @@ public class DbTableItems extends DbTableBase {
 		COL_IS_COMPLETE
 	};
 	
+	//query indices
+	public static final int COL_QUERY_STATS_LIST_ID = 0;
+	public static final int COL_QUERY_STATS_COMPLETE_STATUS = 1;
+	public static final int COL_QUERY_STATS_COUNT_STATUS = 2;
+	
 	private String foreignTable;
 
 	private String foreignColumn;
@@ -62,7 +67,7 @@ public class DbTableItems extends DbTableBase {
 						COL_NAME + " text not null, " +
 						COL_QUANTITY + " integer not null, " +
 						COL_QUANTITY_TYPE + " text not null, " +
-						COL_IS_COMPLETE + " boolean not null DEFAULT false)";
+						COL_IS_COMPLETE + " integer not null DEFAULT 0)";
 						
 		db.execSQL(sql);		
 	}
@@ -96,10 +101,24 @@ public class DbTableItems extends DbTableBase {
 		qb.appendWhere(COL_LIST_ID + " = " + listId);
 		if (noComplete)
 		{
-			qb.appendWhere(COL_IS_COMPLETE + " = 'false'");
+			qb.appendWhere(COL_IS_COMPLETE + " = 0");
 		}
 		
 		return qb.query(db, Columns, null, null, null, null, COL_ID);		
+	}
+	
+	public Cursor getItemStatsByListId(SQLiteDatabase db) {
+
+		/*
+			select list_id, is_complete, count(is_complete)
+			from items
+			group by list_id, is_complete
+		*/
+		return db.rawQuery(
+				"select " + COL_LIST_ID + ", " + COL_IS_COMPLETE + ", count(" + COL_IS_COMPLETE + ")" +
+						" from " + TABLE_NAME +
+						" group by " + COL_LIST_ID + ", " + COL_IS_COMPLETE, 
+						null);
 	}
 	
 	// we don't return a status for this one because there's no guarantee that the list

@@ -38,8 +38,6 @@
 	    android:paddingRight="10dp"
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/header_layout"
-	    android:paddingTop="10dp"
-	    android:paddingBottom="10dp"
     >
         
         <TextView
@@ -79,6 +77,8 @@
         android:layout_below="@+id/subheader_layout"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         >
         <View
             android:layout_width="match_parent"
@@ -106,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@android:color/transparent"
-            android:dividerHeight="10.0sp" 
+            android:dividerHeight="10.0dp" 
             />
     </LinearLayout>
         
@@ -117,6 +117,8 @@
         android:layout_above="@+id/button_layout"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         >
         <View
             android:layout_width="match_parent"
@@ -147,7 +149,7 @@
 
             <Button
                 android:id="@+id/button_add"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/standard_button_width"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/button_add_item" />
@@ -161,13 +163,14 @@
 
             <Button
                 android:id="@+id/button_start_shop"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/standard_button_width"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/button_start_shop" />
         </RelativeLayout>
 
-        <!-- right third -->
+<!-- right third        
+     
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -180,6 +183,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/button_reset" />
         </RelativeLayout>
+-->
     </LinearLayout>
     
     <!-- 

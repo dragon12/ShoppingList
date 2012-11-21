@@ -3,4 +3,8 @@
         android:title="@string/menu_settings"
         android:orderInCategory="100"
         android:showAsAction="never" />
+    <item android:id="@+id/menu_reset_done"
+        android:title="@string/reset_done"
+        android:orderInCategory="1"
+        android:showAsAction="never" />
 </menu>

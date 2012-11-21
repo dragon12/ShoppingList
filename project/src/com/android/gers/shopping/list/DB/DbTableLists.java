@@ -37,10 +37,20 @@ public class DbTableLists extends DbTableBase {
 		ContentValues kvps = new ContentValues();
 		
 		kvps.put(COL_NAME, listName);
+		kvps.put(COL_IS_COMPLETE, 0);
+		kvps.put(COL_IS_DELETED, 0);
 		
-		return db.insert(TABLE_NAME, null, kvps); 
+		return insert(db, kvps); 
 	}
-
+	
+	public long insert(SQLiteDatabase db, ContentValues kvps) {
+		return db.insert(TABLE_NAME, null, kvps);
+	}
+	
+	public Boolean update(SQLiteDatabase db, long id, ContentValues kvps) {
+		return db.update(TABLE_NAME, kvps, COL_ID + " = " + id, null) == 1;
+	}
+	
 	public Cursor getAllLists(SQLiteDatabase db, Boolean noComplete) {
 		// Constructs a new query builder and sets its table name
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -48,8 +58,9 @@ public class DbTableLists extends DbTableBase {
 		
 		if (noComplete)
 		{
-			qb.appendWhere(COL_IS_COMPLETE + " = 'false'");
+			qb.appendWhere(COL_IS_COMPLETE + " = '0' and ");
 		}
+		qb.appendWhere(COL_IS_DELETED + " = '0'");
 		
 		return qb.query(db, Columns, null, null, null, null, COL_ID);
 	}
@@ -77,8 +88,8 @@ public class DbTableLists extends DbTableBase {
 						COL_ID + " integer primary key autoincrement, " +
 						COL_NAME + " text not null, " +
 						COL_CREATION_DATE + " text not null DEFAULT (datetime('now','localtime')), " +
-						COL_IS_COMPLETE + " boolean not null DEFAULT false, " +
-						COL_IS_DELETED + " boolean not null DEFAULT false" +
+						COL_IS_COMPLETE + " boolean not null DEFAULT 0, " +
+						COL_IS_DELETED + " boolean not null DEFAULT 0" +
 								")";
 		Log.i(ShoppingList.LOG_NAME, "Creating lists table with sql command: " + sql);
 		

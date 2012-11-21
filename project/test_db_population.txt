@@ -1,8 +1,31 @@
 insert into lists (_id, name, creation_date, is_complete, is_deleted)
-values (1, 'test list 1', '2012-11-17 17:00:00', 'false', 'false')
+values (1, 'test list 1', '2012-11-17 17:00:00', '0', '0')
 
 insert into items (_id, list_id, name, quantity, quantity_type, is_complete)
-values (1, 1, 'test item 1', 5, 'units', 'false')
+values (1, 1, 'test item 1', 5, 'units', '0')
 
 insert into items (_id, list_id, name, quantity, quantity_type, is_complete)
-values (2, 1, 'test item 2', 100, 'g', 'true')
+values (2, 1, 'test item 2', 100, 'g', '1')
+
+insert into lists (_id, name, creation_date, is_complete, is_deleted)
+values (2, 'test list 2', '2012-11-19 17:00:00', '0', '0')
+
+insert into items (_id, list_id, name, quantity, quantity_type, is_complete)
+values (1, 2, 'test item 2a', 5, 'units', '0')
+
+insert into items (_id, list_id, name, quantity, quantity_type, is_complete)
+values (2, 2, 'test item 2b', 100, 'g', '1')
+
+insert into items (_id, list_id, name, quantity, quantity_type, is_complete)
+values (3, 2, 'test item 2c', 100, 'g', '1')
+
+insert into items (_id, list_id, name, quantity, quantity_type, is_complete)
+values (4, 2, 'test item 2d', 100, 'g', '1')
+
+
+
+select list_id, 
+(select count(*) from items where is_complete == 1) as complete,
+(select count(*) from items where is_complete == 0) as incomplete
+from items
+group by list_id

@@ -4,7 +4,7 @@ public enum QuantityType {
 	UNITS("units", "", true),
 	GRAMMES("g", "g", false),
 	MILLILITRES("ml", "ml", false),
-	PACKETS("packets", "pkts", true);
+	PACKETS("packets", "pkts", false);
 	
 	public static QuantityType fromString(String text) {
 		if (text != null) {

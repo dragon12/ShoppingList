@@ -58,6 +58,7 @@ public class DebugDbHelper {
         		Log.i(ShoppingList.LOG_NAME, "About to copy the db");
     			copyDb();
     			Log.i(ShoppingList.LOG_NAME, "Copied db");
+    			Log.i(ShoppingList.LOG_NAME, "db is at: " + helper.getReadableDatabase().getPath());
     		} catch (IOException e) {
         		throw new Error("Error copying database");
         	}

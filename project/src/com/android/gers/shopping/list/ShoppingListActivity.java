@@ -1,24 +1,28 @@
 package com.android.gers.shopping.list;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import model.ListArrayAdapter;
 import model.ListDataSource;
+import model.ShoppingListItemStats;
 import model.ShoppingListList;
 
+import com.android.gers.shopping.list.SimpleInputDialog.DialogClickListener;
 import com.android.gers.shopping.list.DB.DbTableItems;
 import com.android.gers.shopping.list.DB.ShoppingListDb;
 
 import android.os.Bundle;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.text.InputType;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,11 +32,25 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class ShoppingListActivity 
-		extends ListActivity {
+		extends ListActivity 
+		implements DialogClickListener {
 	
 	private static final int CONTEXT_MENU_DELETE_ID = Menu.FIRST + 1;
 	private static final int CONTEXT_MENU_RENAME_ID = CONTEXT_MENU_DELETE_ID + 1;
 	private static final int CONTEXT_MENU_CLONE_ID = CONTEXT_MENU_RENAME_ID + 1;
+	
+	private static final int DIALOG_ID_LIST_EDIT_NAME = 1;
+	private static final int DIALOG_ID_LIST_CLONE = 2;
+	
+	private enum EditDialogState {
+		NONE,
+		ADD,
+		RENAME;
+	}
+	private EditDialogState editDialogState = EditDialogState.NONE;
+	
+	private ShoppingListList listBeingModified = null;
+	private int indexBeingModified = -1;
 	
 	private ListDataSource dataSource;
 	private ShoppingListDb dbHelper;
@@ -54,8 +72,15 @@ public class ShoppingListActivity
         
         dataSource.open();
         
-        updateListDisplay();
+        reloadListDisplay();
     }
+    
+    @Override 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {     
+    	super.onActivityResult(requestCode, resultCode, data); 
+    	reloadListDisplay();
+    }
+
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
     	super.onListItemClick(l, v, position, id);
@@ -79,31 +104,48 @@ public class ShoppingListActivity
     
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+		ShoppingListList listChosen = (ShoppingListList)getListView().getItemAtPosition(info.position);
+		indexBeingModified = info.position;
+		
     	switch(item.getItemId()) {
     	case CONTEXT_MENU_DELETE_ID:
-    		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
-    		ShoppingListList listChosen = (ShoppingListList)getListView().getItemAtPosition(info.position);
-    		
     		dataSource.deleteList(listChosen);
     		ListArrayAdapter adapter = (ListArrayAdapter)getListAdapter();
     		adapter.remove(listChosen);
     		
     		return true;
     	case CONTEXT_MENU_RENAME_ID:
-    		//display alertdialog to change name
+    		displayRenameDialog(listChosen);
     		return true;
+    		
     	case CONTEXT_MENU_CLONE_ID:
-    		//display alertdialog to get name for cloned list
+    		ShoppingList.ToastNotImplemented(this);
     		return true;
     	}
     	return super.onContextItemSelected(item);
     }
     
-    private void updateListDisplay() {
+    private void reloadListDisplay() {
         List<ShoppingListList> lists = dataSource.getShoppingLists(true);
-        
-        ListArrayAdapter adapter = new ListArrayAdapter(this, R.layout.list_row, lists);
+        HashMap<Long, ShoppingListItemStats> stats = dataSource.getShoppingListItemStats();
+        ListArrayAdapter adapter = new ListArrayAdapter(this, R.layout.list_row, lists, stats);
         setListAdapter(adapter);    	
+    }
+    
+
+    //update the list display with a new list or edited list
+    //if positionToModify == -1 we need to add it to the end of the items
+    private void updateListDisplay(ShoppingListList listOfInterest, int indexToModify) {
+		ListArrayAdapter adapter = (ListArrayAdapter)getListAdapter();
+		if (indexToModify == -1) {
+			adapter.add(listOfInterest);
+		} else {
+			ShoppingListList listToDelete = adapter.getItem(indexToModify);
+			adapter.remove(listToDelete);
+			adapter.insert(listOfInterest, indexToModify);
+		}
+		adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -121,54 +163,116 @@ public class ShoppingListActivity
 				return true;
 			
 			case R.id.menu_add_list:
-				listAddButtonClicked();
+				displayAddListDialog();
 				return true;
 				
 			default:
 				return super.onOptionsItemSelected(item);
-				
 		}
 		
 	}
+	
+    private AlertDialog showListNameEditDialog(String title) {
+    	LayoutInflater inflater = getLayoutInflater();
+		View dialogLayout = inflater.inflate(R.layout.dialog_list_name, null);
 
-	private void listAddButtonClicked() {
-		Log.i(ShoppingList.LOG_NAME, "listAddButtonClicked");
-
-		AlertDialog.Builder alert = 
-				new AlertDialog.Builder(this)
-					.setTitle("Add New List")
-					.setMessage("List Name");
+		AlertDialog dialog = SimpleInputDialog.SimpleInputDialogBuilder(this, this, DIALOG_ID_LIST_EDIT_NAME, title, "List Name", dialogLayout);
 		
-		// Set an EditText view to get user input 
-		final EditText input = new EditText(this);
-		input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-		alert.setView(input);
-
-		final ShoppingListActivity thisActivity = this;
+		DialogValidator validator = new DialogValidator(dialog.getButton(Dialog.BUTTON_POSITIVE));
+		((EditText)dialogLayout.findViewById(R.id.dialog_list_name_edit_name)).addTextChangedListener(validator);
 		
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				String value = input.getText().toString();
-				Log.i(ShoppingList.LOG_NAME, "User entered " + value + "!");
-				
-				ShoppingListList listToAdd = new ShoppingListList(value);
+		return dialog;
+    }
 
-				//add the value to our db
-				try {
-					ListArrayAdapter adapter = (ListArrayAdapter)thisActivity.getListAdapter();
-					
-					adapter.add(dataSource.createList(listToAdd));
-					Toast.makeText(thisActivity, "New list created", Toast.LENGTH_SHORT).show();
-				} catch (Exception e) {
-					Log.e(ShoppingList.LOG_NAME, "Failed to create list with exception: " + e.toString());
-					Toast.makeText(thisActivity, "Failed to create new list", Toast.LENGTH_SHORT).show();
-				}
-				
-			}
-		});
-		
-		alert.show();
+	private void displayAddListDialog() {
+		Log.i(ShoppingList.LOG_NAME, "displayAddListDialog");
+		editDialogState = EditDialogState.ADD;
+		showListNameEditDialog("Add New List");
 	}
+	
+	private void displayRenameDialog(ShoppingListList listChosen) {
+		editDialogState = EditDialogState.RENAME;
+		listBeingModified = listChosen;
+		
+		AlertDialog dialog = showListNameEditDialog("Rename List");
+		
+		//populate the text box with the current name of the list
+		EditText editText = (EditText)dialog.findViewById(R.id.dialog_list_name_edit_name);
+		editText.setText(listChosen.getName());
+	}
+
+
+	public void buttonClicked(int id, DialogInterface dialog, int whichButton) {
+		switch(whichButton)
+    	{
+    		case DialogInterface.BUTTON_POSITIVE:
+    			AlertDialog alertView = (AlertDialog)dialog;
+    			switch(id)
+    			{
+    				case DIALOG_ID_LIST_EDIT_NAME:
+    					EditText inputText = (EditText)alertView.findViewById(R.id.dialog_list_name_edit_name);
+    					String valueEntered = inputText.getText().toString();
+    					Log.i(ShoppingList.LOG_NAME, "User entered " + valueEntered + "!");
+    					
+    					if (editDialogState == EditDialogState.ADD) {
+    						ShoppingListList listToAdd = new ShoppingListList(valueEntered);
+
+    						//add the value to our db
+    						try {
+    							ListArrayAdapter adapter = (ListArrayAdapter)getListAdapter();
+    							
+    							adapter.add(dataSource.createList(listToAdd));
+    							Toast.makeText(this, "New list created", Toast.LENGTH_SHORT).show();
+    						} catch (Exception e) {
+    							Log.e(ShoppingList.LOG_NAME, "Failed to create list with exception: " + e.toString());
+    							Toast.makeText(this, "Failed to create new list", Toast.LENGTH_SHORT).show();
+    						}
+    					} 
+    					else if (editDialogState == EditDialogState.RENAME) {
+    		        		//update the item that was selected for editing
+    		        		if (listBeingModified.getName() != valueEntered) {
+	    		        		ShoppingListList renamedList = new ShoppingListList(listBeingModified);
+	    		        		renamedList.setName(valueEntered);
+	    		        		
+	    		        		try {
+	    		        			if (dataSource.updateList(renamedList)) {
+	    		        				updateListDisplay(renamedList, indexBeingModified);
+	    		        			} else {
+	    		        				Log.e(ShoppingList.LOG_NAME, "Failed to do rename!");
+	    		        				Toast.makeText(this,  "Rename failed", Toast.LENGTH_SHORT);
+	    		        			}
+	    		        		} catch(Exception e) {
+	    		        			Log.e(ShoppingList.LOG_NAME, "Threw exception from updateList: " + e.toString());
+	    		        			Toast.makeText(this, "Exception thrown", Toast.LENGTH_SHORT);
+	    		        		}
+    		        				
+    		        		}
+    		        		break;
+    					} 
+    					else {
+    						Log.e(ShoppingList.LOG_NAME, "Invalid state: " + editDialogState.toString());
+    					}
+    					
+    					break;
+    					
+    				case DIALOG_ID_LIST_CLONE:
+    					ShoppingList.ToastNotImplemented(this);
+    					break;
+
+    				default:
+    					Log.e(ShoppingList.LOG_NAME, "Saw bad id in ButtonClicked: " + id);
+    					break;
+    			}
+    			break;
+
+    		default:
+    			break;
+    	}	
+		
+		//reset state
+		editDialogState = EditDialogState.NONE;
+	}
+		
 	
 	private void resetToTestDb() {
 		Log.w(ShoppingList.LOG_NAME, "Resetting to test db!");
@@ -185,7 +289,6 @@ public class ShoppingListActivity
 		dbHelper.close();
 		dataSource.open();
 		
-		updateListDisplay();
+		reloadListDisplay();
 	}
-
 }

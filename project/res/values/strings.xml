@@ -5,6 +5,8 @@
     <string name="title_activity_shopping_list_front">Shopping List</string>
     <string name="front_existing_lists">Existing Lists</string>
     <string name="test_db_name">testDb.db3</string>
+    <string name="test_db_data_lists">testDbLists.csv</string>
+    <string name="test_db_data_items">testDbItems.csv</string>
     <string name="menu_reset_to_test_db">Reset To Test DB</string>
     <string name="add_list">Add List</string>
     <string name="title_activity_shopping_list_items">Shopping List</string>
@@ -23,5 +25,6 @@
     <string name="button_add_item">Add Item</string>
     <string name="button_start_shop">Start Shop!</string>
     <string name="button_reset">Reset</string>
+    <string name="reset_done">Reset Done</string>
     
 </resources>

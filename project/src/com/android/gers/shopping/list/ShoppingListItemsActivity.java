@@ -2,6 +2,7 @@ package com.android.gers.shopping.list;
 
 import java.util.List;
 
+import com.android.gers.shopping.list.SimpleInputDialog.DialogClickListener;
 import com.android.gers.shopping.list.DB.DbTableItems;
 import com.android.gers.shopping.list.DB.ShoppingListDb;
 
@@ -15,8 +16,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -25,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,7 +36,7 @@ import android.widget.Toast;
 public class ShoppingListItemsActivity
 	extends ListActivity
 	implements 
-			DialogInterface.OnClickListener,
+			DialogClickListener,
 			OnClickListener,
 			ListViewCheckBoxListener {
 	
@@ -103,66 +101,23 @@ public class ShoppingListItemsActivity
         Button startShopButton = (Button) findViewById(R.id.button_start_shop);
         startShopButton.setOnClickListener(this);
         
+        /*
         Button resetButton = (Button) findViewById(R.id.button_reset);
         resetButton.setOnClickListener(this);
         
-        /*CheckBox selectDeselectCheckBox = (CheckBox)findViewById(R.id.select_deselect_all);
+        CheckBox selectDeselectCheckBox = (CheckBox)findViewById(R.id.select_deselect_all);
         selectDeselectCheckBox.setOnClickListener(this);*/
         
         reloadListDisplay();
     }
-    
-    private class DialogValidator implements TextWatcher {
-
-    	private Button button;
-
-		public DialogValidator(Button button) {
-			this.button = button;
-			this.button.setEnabled(false);
-		}
-		
-		public void afterTextChanged(Editable s) {
-			//nothing
-		}
-
-		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			//nothing
-		}
-
-		public void onTextChanged(CharSequence s, int start, int before, int count) {
-			if (s.length() == 0) {
-				button.setEnabled(false);
-			} else {
-				button.setEnabled(true);
-			}
-		}
-    	
-    }
 
     private AlertDialog showEditDialog(String title) {
-		AlertDialog.Builder alertBuilder = 
-				new AlertDialog.Builder(this)
-					.setTitle(title);
-					
+    	
 		LayoutInflater inflater = getLayoutInflater();
 		View dialogLayout = inflater.inflate(R.layout.dialog_edit_item, null);
-		
-		ArrayAdapter<QuantityType> adapter = new ArrayAdapter<QuantityType>(this, android.R.layout.simple_spinner_item, QuantityType.values());
-	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    
-	    Spinner spinner = (Spinner) dialogLayout.findViewById(R.id.edit_item_edit_quantity_type);
-	    spinner.setAdapter(adapter);
-	    
-		alertBuilder.setView(dialogLayout);
-		
-		alertBuilder.setPositiveButton("Confirm", this);
-		alertBuilder.setNegativeButton("Cancel", this);
-		
-		AlertDialog dialog = alertBuilder.create();
-		dialog.show();
 
-		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
+		AlertDialog dialog = SimpleInputDialog.SimpleInputDialogBuilder(this, this, 0, title, "List Name", dialogLayout);
+				
 		DialogValidator validator = new DialogValidator(dialog.getButton(Dialog.BUTTON_POSITIVE));
 		((EditText)dialogLayout.findViewById(R.id.edit_item_edit_name)).addTextChangedListener(validator);
 		((EditText)dialogLayout.findViewById(R.id.edit_item_edit_quantity)).addTextChangedListener(validator);
@@ -181,7 +136,7 @@ public class ShoppingListItemsActivity
     
     private void startShopButtonClicked() {
     	Log.i(ShoppingList.LOG_NAME, "startShopButtonClicked");
-    	Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+    	ShoppingList.ToastNotImplemented(this);
     }
     
     @Override
@@ -242,6 +197,9 @@ public class ShoppingListItemsActivity
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId())
 		{
+			case R.id.menu_reset_done:
+				resetButtonClicked();
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 				
@@ -306,10 +264,10 @@ public class ShoppingListItemsActivity
 		
 		/*case R.id.select_deselect_all:
 			resetButtonClicked();
-			break;*/
+			break;
 		case R.id.button_reset:
 			resetButtonClicked();
-			break;
+			break;*/
 			
 		default:
 			//nothing
@@ -317,7 +275,7 @@ public class ShoppingListItemsActivity
 		}
 	}
 	
-	public void onClick(DialogInterface dialog, int which) {
+	public void buttonClicked(int id, DialogInterface dialog, int which) {
 		switch(which) {
         case DialogInterface.BUTTON_POSITIVE:
         {

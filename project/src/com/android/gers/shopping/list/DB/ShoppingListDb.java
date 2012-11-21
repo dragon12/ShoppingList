@@ -16,15 +16,17 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 	private DbTableLists dbTableLists;
 	private DbTableItems dbTableItems;
 	
-	private DebugDbHelper debugHelper;
+	private TestDBGenerator debugHelper;
+	Context myContext;
 	
 	public ShoppingListDb(Context context) {
 		super(context, ShoppingList.DB.NAME, null, ShoppingList.DB.DB_VERSION);
 
+		this.myContext = context;
 		dbTableLists = new DbTableLists();
 		dbTableItems = new DbTableItems(DbTableLists.TABLE_NAME, DbTableLists.COL_ID);
 		
-		debugHelper = new DebugDbHelper(context, this);
+		debugHelper = new TestDBGenerator(context, this);
 	}
 
 	
@@ -44,16 +46,25 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 	
 	public void deleteDb() {
 		close();
-		debugHelper.deleteDb();
+		myContext.deleteDatabase(ShoppingList.DB.NAME);
 	}
 	
 	public void createTestDb() throws IOException {
-		debugHelper.createDb();
+		debugHelper.CreateTestDB();
 	}
 	
 	public long insertList(SQLiteDatabase db, String listName) {
 		return dbTableLists.insert(db, listName); 
 	}
+	
+	public long insertList(SQLiteDatabase db, ContentValues list) {
+		return dbTableLists.insert(db, list);
+	}
+
+	public Boolean updateList(SQLiteDatabase db, long id, ContentValues kvps) {
+		return dbTableLists.update(db, id, kvps);
+	}	
+	
 	
 	public long insertItem(SQLiteDatabase db, ContentValues kvps) {
 		return dbTableItems.insert(db, kvps);
@@ -81,6 +92,10 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 	
 	public Cursor getItemsByID(SQLiteDatabase db, long itemId) {
 		return dbTableItems.getItemById(db, itemId);
+	}
+
+	public Cursor getShoppingListItemStats(SQLiteDatabase db) {
+		return dbTableItems.getItemStatsByListId(db);
 	}
 	
 	public Boolean deleteListById(SQLiteDatabase db, long id) {

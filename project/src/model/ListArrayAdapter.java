@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.android.gers.shopping.list.R;
@@ -13,11 +14,13 @@ import android.widget.TextView;
 
 public class ListArrayAdapter extends ArrayAdapter<ShoppingListList> {
 	private static List<ShoppingListList> shoppingLists;
+	private HashMap<Long, ShoppingListItemStats> stats;
 
-	public ListArrayAdapter(Context context, int textViewResourceId, List<ShoppingListList> results) {
+	public ListArrayAdapter(Context context, int textViewResourceId, List<ShoppingListList> results, HashMap<Long, ShoppingListItemStats> stats) {
 		super(context, textViewResourceId, results);
 
 		shoppingLists = results;
+		this.stats = stats;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent){
@@ -40,6 +43,7 @@ public class ListArrayAdapter extends ArrayAdapter<ShoppingListList> {
 		 * Therefore, i refers to the current Item object.
 		 */
 		ShoppingListList i = shoppingLists.get(position);
+		ShoppingListItemStats stat = stats.get(i.getId());
 
 		if (i != null) {
 
@@ -47,6 +51,7 @@ public class ListArrayAdapter extends ArrayAdapter<ShoppingListList> {
 			// These TextViews are created in the XML files we defined.
 
 			TextView listName = (TextView) v.findViewById(R.id.list_row_list_name);
+			TextView listStats = (TextView) v.findViewById(R.id.list_row_list_stats);
 			TextView listCreationDate = (TextView) v.findViewById(R.id.list_row_list_date);
 
 			// check to see if each individual textview is null.
@@ -54,8 +59,16 @@ public class ListArrayAdapter extends ArrayAdapter<ShoppingListList> {
 			if (listName != null){
 				listName.setText(i.getName());
 			}
+			if (listStats != null) {
+				if (stat != null) {
+					listStats.setText(stat.numComplete + "/" + (stat.numComplete + stat.numIncomplete));
+				} else {
+					listStats.setText("0/0");	
+				}
+			}
+				
 			if (listCreationDate != null){
-				listCreationDate.setText(i.getDate());
+				listCreationDate.setText(i.getDisplayDate());
 			}
 		}
 
