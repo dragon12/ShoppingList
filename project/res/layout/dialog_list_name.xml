@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<EditText 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dialog_list_name_edit_name"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:inputType="textCapWords"
-    android:selectAllOnFocus="true"
+    android:paddingBottom="15dp"
+    >
+    <TextView android:id="@+id/rename_list_name_label"
+              android:layout_alignParentLeft="true"
+              android:layout_alignParentTop="true"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="20dp"
+              android:text="Name:"
+              android:textSize="20dp"
+        />
+    <EditText android:id="@+id/rename_list_edit_name"
+              android:layout_alignParentRight="true"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:inputType="textCapWords"
+              android:layout_alignBottom="@+id/rename_list_name_label"
+              android:layout_toRightOf="@+id/rename_list_name_label"
+              android:layout_marginLeft="30dp"
+              android:selectAllOnFocus="true"
+              />
     >
     
 
-</EditText>
+</RelativeLayout>

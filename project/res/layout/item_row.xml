@@ -3,34 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal" 
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     >
-    
+    <!-- had some trouble here getting multi-line list views to work properly
+     the eventual fix was for each of the layout_height to be fill_parent, and all of the
+     gravities to be center_vertical
+ -->
     <TextView
         android:id="@+id/item_row_item_quantity"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_weight="1"
-        android:gravity="right"
+        android:gravity="right|center_vertical"
         android:text="testQty"
         android:textSize="15dp"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        />
     
     <TextView
         android:id="@+id/item_row_item_name"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_weight="4"
         android:paddingLeft="30dp"
         android:text="testName"
         android:textSize="17dp"
-        tools:ignore="HardcodedText" />
+        android:gravity="center_vertical"
+        tools:ignore="HardcodedText"
+        />
     
     <CheckBox
         android:id="@+id/item_row_item_complete"
         android:layout_width="40dp"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:focusable="false"
+        android:gravity="center_vertical"
         />
     
     <!-- 

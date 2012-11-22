@@ -14,15 +14,18 @@ import android.widget.TextView;
 
 public class ListArrayAdapter extends ArrayAdapter<ShoppingListList> {
 	private static List<ShoppingListList> shoppingLists;
-	private HashMap<Long, ShoppingListItemStats> stats;
+	private HashMap<Long, ShoppingListItemStats> stats = null;
 
-	public ListArrayAdapter(Context context, int textViewResourceId, List<ShoppingListList> results, HashMap<Long, ShoppingListItemStats> stats) {
+	public ListArrayAdapter(Context context, int textViewResourceId, List<ShoppingListList> results) {
 		super(context, textViewResourceId, results);
 
 		shoppingLists = results;
-		this.stats = stats;
 	}
 
+	public void setStats(HashMap<Long, ShoppingListItemStats> stats) {
+		this.stats = stats;
+	}
+	
 	public View getView(int position, View convertView, ViewGroup parent){
 
 		// assign the view we are converting to a local variable
@@ -32,7 +35,7 @@ public class ListArrayAdapter extends ArrayAdapter<ShoppingListList> {
 		// to inflate it basically means to render, or show, the view.
 		if (v == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.list_row, null);
+			v = inflater.inflate(R.layout.list_row, parent, false);
 		}
 
 		/*
@@ -43,7 +46,10 @@ public class ListArrayAdapter extends ArrayAdapter<ShoppingListList> {
 		 * Therefore, i refers to the current Item object.
 		 */
 		ShoppingListList i = shoppingLists.get(position);
-		ShoppingListItemStats stat = stats.get(i.getId());
+		ShoppingListItemStats stat = null;
+		if (stats != null) {
+			stat = stats.get(i.getId());
+		}
 
 		if (i != null) {
 

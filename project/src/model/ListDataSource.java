@@ -64,6 +64,36 @@ public class ListDataSource {
 		return retVal;
 	}
 	
+	public ShoppingListList cloneList(long originalListId, ShoppingListList clonedList, Boolean keepComplete) throws Exception {
+		Log.i(ShoppingList.LOG_NAME, "Cloning list " + originalListId + " to list with name " + clonedList.getName());
+		
+		//insert the new list
+		long insertId = dbHelper.insertList(db, clonedList.getName());
+
+		//read it back out of the db
+		Cursor queryCursor = dbHelper.getListById(db, insertId);
+		queryCursor.moveToFirst();
+		if (queryCursor.isAfterLast()) {
+			throw new Exception("We added an item but then it wasn't there!");
+		}
+		ShoppingListList retVal = cursorToShoppingList(queryCursor);
+		Log.i(ShoppingList.LOG_NAME, "Inserted new list: " + retVal.toString());
+		
+		queryCursor.close();
+		
+		//now iterate over all the items in the other list and add them for this list, maintaining complete where appropriate
+		List<ShoppingListItem> itemsToDuplicate = getShoppingListItems(originalListId, false);
+		for (ShoppingListItem item : itemsToDuplicate) {
+			if (!keepComplete) {
+				item.setComplete(false);
+			}
+			item.setListId(retVal.getId());
+			createItem(item);
+		}
+		
+		return retVal;
+	}
+	
 	public ShoppingListItem createItem(ShoppingListItem newItem) throws Exception {
 		Log.i(ShoppingList.LOG_NAME, "Inserting new item: " + newItem.toString());
 		

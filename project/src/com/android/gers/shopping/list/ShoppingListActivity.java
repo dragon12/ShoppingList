@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -120,16 +121,21 @@ public class ShoppingListActivity
     		return true;
     		
     	case CONTEXT_MENU_CLONE_ID:
-    		ShoppingList.ToastNotImplemented(this);
+    		displayCloneDialog(listChosen);
     		return true;
     	}
     	return super.onContextItemSelected(item);
     }
     
+    private void updateStats(ListArrayAdapter adapter) {
+    	HashMap<Long, ShoppingListItemStats> stats = dataSource.getShoppingListItemStats();
+        adapter.setStats(stats);
+    }
+    
     private void reloadListDisplay() {
         List<ShoppingListList> lists = dataSource.getShoppingLists(true);
-        HashMap<Long, ShoppingListItemStats> stats = dataSource.getShoppingListItemStats();
-        ListArrayAdapter adapter = new ListArrayAdapter(this, R.layout.list_row, lists, stats);
+        ListArrayAdapter adapter = new ListArrayAdapter(this, R.layout.list_row, lists);
+        updateStats(adapter);
         setListAdapter(adapter);    	
     }
     
@@ -172,14 +178,26 @@ public class ShoppingListActivity
 		
 	}
 	
-    private AlertDialog showListNameEditDialog(String title) {
+	private AlertDialog showListNameEditDialog(String title) {
     	LayoutInflater inflater = getLayoutInflater();
 		View dialogLayout = inflater.inflate(R.layout.dialog_list_name, null);
 
-		AlertDialog dialog = SimpleInputDialog.SimpleInputDialogBuilder(this, this, DIALOG_ID_LIST_EDIT_NAME, title, "List Name", dialogLayout);
+		AlertDialog dialog = SimpleInputDialog.SimpleInputDialogBuilder(this, this, DIALOG_ID_LIST_EDIT_NAME, title, null, dialogLayout);
 		
 		DialogValidator validator = new DialogValidator(dialog.getButton(Dialog.BUTTON_POSITIVE));
-		((EditText)dialogLayout.findViewById(R.id.dialog_list_name_edit_name)).addTextChangedListener(validator);
+		((EditText)dialogLayout.findViewById(R.id.rename_list_edit_name)).addTextChangedListener(validator);
+		
+		return dialog;
+    }
+
+	private AlertDialog showCloneListDialog(String title) {
+    	LayoutInflater inflater = getLayoutInflater();
+		View dialogLayout = inflater.inflate(R.layout.dialog_list_clone, null);
+
+		AlertDialog dialog = SimpleInputDialog.SimpleInputDialogBuilder(this, this, DIALOG_ID_LIST_CLONE, title, null, dialogLayout);
+		
+		DialogValidator validator = new DialogValidator(dialog.getButton(Dialog.BUTTON_POSITIVE));
+		((EditText)dialogLayout.findViewById(R.id.clone_list_edit_name)).addTextChangedListener(validator);
 		
 		return dialog;
     }
@@ -194,13 +212,27 @@ public class ShoppingListActivity
 		editDialogState = EditDialogState.RENAME;
 		listBeingModified = listChosen;
 		
-		AlertDialog dialog = showListNameEditDialog("Rename List");
+		AlertDialog dialog = showListNameEditDialog("Rename List '" + listBeingModified.getName() + "'");
 		
 		//populate the text box with the current name of the list
-		EditText editText = (EditText)dialog.findViewById(R.id.dialog_list_name_edit_name);
+		EditText editText = (EditText)dialog.findViewById(R.id.rename_list_edit_name);
 		editText.setText(listChosen.getName());
 	}
 
+	private void displayCloneDialog(ShoppingListList listChosen) {
+		editDialogState = EditDialogState.NONE;
+		listBeingModified = listChosen;
+		
+		AlertDialog dialog = showCloneListDialog("Clone List '" + listBeingModified.getName() + "'");
+		
+		//populate the text box with the current name of the list
+		EditText editText = (EditText)dialog.findViewById(R.id.clone_list_edit_name);
+		editText.setText("Cloned " + listChosen.getName());
+		
+		//checkbox should be set by default
+		CheckBox box = (CheckBox)dialog.findViewById(R.id.clone_list_keep_complete_check);
+		box.setChecked(true);
+	}
 
 	public void buttonClicked(int id, DialogInterface dialog, int whichButton) {
 		switch(whichButton)
@@ -210,7 +242,7 @@ public class ShoppingListActivity
     			switch(id)
     			{
     				case DIALOG_ID_LIST_EDIT_NAME:
-    					EditText inputText = (EditText)alertView.findViewById(R.id.dialog_list_name_edit_name);
+    					EditText inputText = (EditText)alertView.findViewById(R.id.rename_list_edit_name);
     					String valueEntered = inputText.getText().toString();
     					Log.i(ShoppingList.LOG_NAME, "User entered " + valueEntered + "!");
     					
@@ -239,11 +271,11 @@ public class ShoppingListActivity
 	    		        				updateListDisplay(renamedList, indexBeingModified);
 	    		        			} else {
 	    		        				Log.e(ShoppingList.LOG_NAME, "Failed to do rename!");
-	    		        				Toast.makeText(this,  "Rename failed", Toast.LENGTH_SHORT);
+	    		        				Toast.makeText(this,  "Rename failed", Toast.LENGTH_SHORT).show();
 	    		        			}
 	    		        		} catch(Exception e) {
 	    		        			Log.e(ShoppingList.LOG_NAME, "Threw exception from updateList: " + e.toString());
-	    		        			Toast.makeText(this, "Exception thrown", Toast.LENGTH_SHORT);
+	    		        			Toast.makeText(this, "Exception thrown", Toast.LENGTH_SHORT).show();
 	    		        		}
     		        				
     		        		}
@@ -256,7 +288,32 @@ public class ShoppingListActivity
     					break;
     					
     				case DIALOG_ID_LIST_CLONE:
-    					ShoppingList.ToastNotImplemented(this);
+    					EditText cloneText = (EditText)alertView.findViewById(R.id.clone_list_edit_name);
+    					String clonedName = cloneText.getText().toString();
+    					
+    					CheckBox cloneBox = (CheckBox)alertView.findViewById(R.id.clone_list_keep_complete_check);
+    					Boolean keepComplete = !cloneBox.isChecked();
+    					
+    					Log.i(ShoppingList.LOG_NAME, "User entered " + clonedName + ", keep_complete = " + keepComplete.toString());
+    					ShoppingListList listToAdd = new ShoppingListList(clonedName);
+
+    					//clone the list in our db
+    					try {
+    						ListArrayAdapter adapter = (ListArrayAdapter)getListAdapter();
+    						
+    						//clone the list
+    						ShoppingListList clonedList = dataSource.cloneList(listBeingModified.getId(), listToAdd, keepComplete);
+    								
+    						//update the adapter stats with the cloned stuff
+    						updateStats(adapter);
+    						
+    						//and finally add the cloned list to our listView
+    						adapter.add(clonedList);
+    						Toast.makeText(this, "List cloned", Toast.LENGTH_SHORT).show();
+    					} catch (Exception e) {
+    						Log.e(ShoppingList.LOG_NAME, "Failed to clone list with exception: " + e.toString());
+    						Toast.makeText(this, "Failed to clone list", Toast.LENGTH_SHORT).show();
+    					}
     					break;
 
     				default:

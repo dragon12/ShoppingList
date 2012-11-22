@@ -15,8 +15,11 @@ public class SimpleInputDialog {
 	public static AlertDialog SimpleInputDialogBuilder(Context context, final DialogClickListener listener, final int dialogId, String title, String message, View viewToUse) {
 		AlertDialog.Builder alertBuilder = 
 				new AlertDialog.Builder(context)
-					.setTitle(title)
-					.setMessage(message);
+					.setTitle(title);
+		
+		if (message != null) {
+			alertBuilder.setMessage(message);
+		}
 					
 		alertBuilder.setView(viewToUse);
 		

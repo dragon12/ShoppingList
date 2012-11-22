@@ -26,5 +26,7 @@
     <string name="button_start_shop">Start Shop!</string>
     <string name="button_reset">Reset</string>
     <string name="reset_done">Reset Done</string>
+    <string name="clone_list_reset_to_incomplete">Reset to incomplete:</string>
+    <string name="clone_list_name">Name:</string>
     
 </resources>

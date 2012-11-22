@@ -6,7 +6,7 @@ _id,list_id,name,quantity,quantity_type,is_complete
 5,3,Eggs,1,packets,0
 6,3,Butter,200,g,1
 7,3,Bacon,10,units,0
-8,3,Very very very long long item,1,packets,0
+8,3,Very very very extremely impossibly bigger and bigger long item,1,packets,0
 9,3,Cake,2,units,1
 10,3,Bread,1,packets,0
 11,3,Coffee,200,g,1

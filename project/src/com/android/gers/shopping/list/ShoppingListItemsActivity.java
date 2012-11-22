@@ -116,7 +116,13 @@ public class ShoppingListItemsActivity
 		LayoutInflater inflater = getLayoutInflater();
 		View dialogLayout = inflater.inflate(R.layout.dialog_edit_item, null);
 
-		AlertDialog dialog = SimpleInputDialog.SimpleInputDialogBuilder(this, this, 0, title, "List Name", dialogLayout);
+		ArrayAdapter<QuantityType> adapter = new ArrayAdapter<QuantityType>(this, android.R.layout.simple_spinner_item, QuantityType.values());
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		Spinner spinner = (Spinner) dialogLayout.findViewById(R.id.edit_item_edit_quantity_type);
+		spinner.setAdapter(adapter);
+		
+		AlertDialog dialog = SimpleInputDialog.SimpleInputDialogBuilder(this, this, 0, title, null, dialogLayout);
 				
 		DialogValidator validator = new DialogValidator(dialog.getButton(Dialog.BUTTON_POSITIVE));
 		((EditText)dialogLayout.findViewById(R.id.edit_item_edit_name)).addTextChangedListener(validator);
@@ -157,7 +163,8 @@ public class ShoppingListItemsActivity
     	quantityBox.setText(itemToEdit.getQuantity().toString());
     	
     	@SuppressWarnings("unchecked")
-		int typePosition = ((ArrayAdapter<QuantityType>)quantityTypeSpinner.getAdapter()).getPosition(itemToEdit.getQuantityType());
+    	ArrayAdapter<QuantityType> adapter = (ArrayAdapter<QuantityType>)quantityTypeSpinner.getAdapter();
+		int typePosition = adapter.getPosition(itemToEdit.getQuantityType());
     	quantityTypeSpinner.setSelection(typePosition);
     	
     	currentState = DialogState.EDIT;
