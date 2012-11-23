@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/shopping_list_items"
+    android:id="@+id/shopping_list_shop_mode"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     >
@@ -35,10 +35,10 @@
         android:id="@+id/subheader_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-	    android:paddingLeft="10dp"
-	    android:paddingRight="10dp"
-	    android:layout_alignParentLeft="true"
-	    android:layout_below="@+id/header_layout"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/header_layout"
     >
         
         <TextView
@@ -65,9 +65,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="@string/items_heading_done"
+            android:text="@string/shop_mode_heading_done"
             android:textSize="18dp"
-            android:textStyle="bold" />
+            android:textStyle="bold" 
+            />
             
     </LinearLayout>
     
@@ -136,12 +137,20 @@
         android:paddingBottom="@dimen/padding_large"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        >
 
-        <!-- android:layout_toLeftOf="@+id/select_deselect_all" -->
+        <Button
+            android:id="@+id/button_undo"
+            android:layout_width="@dimen/standard_button_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/shop_mode_undo_last"
+            />
         
-        <!-- left third -->
-
+<!-- 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -155,7 +164,6 @@
                 android:text="@string/button_add_item" />
         </RelativeLayout>
 
-        <!-- middle third -->
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -168,33 +176,6 @@
                 android:layout_centerInParent="true"
                 android:text="@string/button_start_shop" />
         </RelativeLayout>
-
-<!-- right third        
-     
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" >
-
-            <Button
-                android:id="@+id/button_reset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/button_reset" />
-        </RelativeLayout>
--->
-    </LinearLayout>
-    
-    <!-- 
-    <CheckBox
-        android:id="@+id/select_deselect_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/list_layout"
-        android:layout_alignTop="@+id/button_layout"
-        android:paddingRight="11dp"
-        />
         -->
-    
+    </LinearLayout>
 </RelativeLayout>

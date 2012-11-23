@@ -6,6 +6,7 @@ import com.android.gers.shopping.list.SimpleInputDialog.DialogClickListener;
 import com.android.gers.shopping.list.DB.DbTableItems;
 import com.android.gers.shopping.list.DB.ShoppingListDb;
 
+import model.BaseItemArrayAdapter;
 import model.ItemArrayAdapter;
 import model.ListDataSource;
 import model.QuantityType;
@@ -16,6 +17,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -30,22 +32,18 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SlidingDrawer;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 public class ShoppingListItemsActivity
-	extends ListActivity
+	extends BaseListItemsActivity
 	implements 
 			DialogClickListener,
-			OnClickListener,
-			ListViewCheckBoxListener {
+			OnClickListener
+			 {
 	
 	private static final int CONTEXT_MENU_DELETE_ID = Menu.FIRST + 1;
-
-	private ListDataSource dataSource;
-	private ShoppingListDb dbHelper;
-	
-	private long originatingListId;
 	
 	private enum DialogState {
 		NONE,
@@ -57,59 +55,27 @@ public class ShoppingListItemsActivity
 	DialogState currentState = DialogState.NONE;
 	ShoppingListItem itemToEdit = null;
 	int indexBeingEdited = -1;
+
+	public ShoppingListItemsActivity() {
+		super(R.layout.activity_shopping_list_items, R.menu.activity_shopping_list_items, true);
+	}
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shopping_list_items);
-        
-        Bundle extras = getIntent().getExtras();
-        
-        if (extras != null) {
-        	if (extras.containsKey(DbTableItems.COL_LIST_ID)) {
-        		Log.i(ShoppingList.LOG_NAME, "extras does contain our key");
-        	}
-        	
-        	originatingListId = extras.getLong(DbTableItems.COL_LIST_ID);
-        	Log.i(ShoppingList.LOG_NAME, "Originating was " + originatingListId);
-        	
-        } else {
-        	Log.e(ShoppingList.LOG_NAME, "Had no extras in activity!");
-        	this.finish();
-        }
-        
-        this.getListView().setDividerHeight(2);
-        
-        registerForContextMenu(getListView());
-        
-        dbHelper = new ShoppingListDb(this);
-        
-        Log.i(ShoppingList.LOG_NAME, "Creating list data source in items");
-        dataSource = new ListDataSource(this, dbHelper);
-        Log.i(ShoppingList.LOG_NAME, "Done");
-        
-        dataSource.open();
-        
-        //get the list details
-        ShoppingListList list = dataSource.getShoppingList(originatingListId);
-        EditText title = (EditText)findViewById(R.id.list_name);
-        title.setText(list.getName());
         
         Button addButton = (Button) findViewById(R.id.button_add);
         addButton.setOnClickListener(this);
         
         Button startShopButton = (Button) findViewById(R.id.button_start_shop);
         startShopButton.setOnClickListener(this);
-        
-        /*
-        Button resetButton = (Button) findViewById(R.id.button_reset);
-        resetButton.setOnClickListener(this);
-        
-        CheckBox selectDeselectCheckBox = (CheckBox)findViewById(R.id.select_deselect_all);
-        selectDeselectCheckBox.setOnClickListener(this);*/
-        
-        reloadListDisplay();
     }
+    
+    @Override
+    protected BaseItemArrayAdapter createAdapter(List<ShoppingListItem> items) {
+    	return new ItemArrayAdapter(this, this, R.layout.item_row, items);
+    }
+    
 
     private AlertDialog showEditDialog(String title) {
     	
@@ -142,16 +108,15 @@ public class ShoppingListItemsActivity
     
     private void startShopButtonClicked() {
     	Log.i(ShoppingList.LOG_NAME, "startShopButtonClicked");
-    	ShoppingList.ToastNotImplemented(this);
+    	Intent i = new Intent(this, ShoppingListShoppingMode.class);
+    	i.putExtra(DbTableItems.COL_LIST_ID, originatingListId);
+    	
+    	startActivityForResult(i, 0);
     }
     
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-    	super.onListItemClick(l, v, position, id);
-    	
-    	Log.i(ShoppingList.LOG_NAME, "onListItemClick position " + position + ", id " + id);
-    	itemToEdit = (ShoppingListItem) l.getItemAtPosition(position);
-    	Log.i(ShoppingList.LOG_NAME, "corresponds to item: " + itemToEdit.toString() + "(which has id " + itemToEdit.getId() + ")");
+    protected void listItemClicked(ShoppingListItem itemClicked, int position) {
+    	itemToEdit = itemClicked;
     	
     	AlertDialog dialog = showEditDialog("Edit Item");
     	
@@ -177,30 +142,24 @@ public class ShoppingListItemsActivity
     	
     	dataSource.setAllListItemsCompleteState(originatingListId, false);
     	
-    	List<ShoppingListItem> items = dataSource.getShoppingListItems(originatingListId, false);
+    	List<ShoppingListItem> items = dataSource.getShoppingListItems(originatingListId, true);
         
     	((ItemArrayAdapter)getListAdapter()).clear();
     	((ItemArrayAdapter)getListAdapter()).addAll(items);
     }
     
     // handles checkbox changes in the listview
-	public void checkBoxChanged(int listPosition, CompoundButton buttonView, boolean isChecked) {
+	public void statusChanged(int listPosition, View triggeredView, boolean isOn) {
 		Log.i(ShoppingList.LOG_NAME, "checkBoxChanged, position " + listPosition);
 		
     	ShoppingListItem itemChecked = (ShoppingListItem) getListView().getItemAtPosition(listPosition);
     	Log.i(ShoppingList.LOG_NAME, "corresponds to item: " + itemChecked.toString() + "(which has id " + itemChecked.getId() + ")");
 
-    	itemChecked.setComplete(isChecked);
+    	itemChecked.setComplete(isOn);
     	updateItemInDb(itemChecked);
 	}
     
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_shopping_list_items, menu);
-        return true;
-    }
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId())
 		{
@@ -236,14 +195,6 @@ public class ShoppingListItemsActivity
     	return super.onContextItemSelected(item);
     }
     
-    private void reloadListDisplay() {
-    	Log.i(ShoppingList.LOG_NAME, "reloadListDisplay");
-        List<ShoppingListItem> items = dataSource.getShoppingListItems(originatingListId, false);
-        
-        ItemArrayAdapter adapter = new ItemArrayAdapter(this,this, R.layout.item_row, items);
-        setListAdapter(adapter);
-    }
-    
     //update the list display with a new item or edited item
     //if positionToModify == -1 we need to add it to the end of the items
     private void updateListDisplay(ShoppingListItem itemOfInterest, int indexToModify) {
@@ -268,13 +219,6 @@ public class ShoppingListItemsActivity
 		case R.id.button_start_shop:
 			startShopButtonClicked();
 			break;
-		
-		/*case R.id.select_deselect_all:
-			resetButtonClicked();
-			break;
-		case R.id.button_reset:
-			resetButtonClicked();
-			break;*/
 			
 		default:
 			//nothing
@@ -338,17 +282,4 @@ public class ShoppingListItemsActivity
 		}
     	currentState = DialogState.NONE;
 	}
-
-	Boolean updateItemInDb(ShoppingListItem itemToUpdate) {
-		Boolean retVal = true;
-		try {
-			dataSource.updateItem(itemToUpdate);
-		} catch (Exception e) {
-			Log.e(ShoppingList.LOG_NAME, "Failed to edit item with exception: " + e.toString());
-			Toast.makeText(this, "Failed to edit item", Toast.LENGTH_SHORT).show();
-			retVal = false;
-		}
-		return retVal;
-	}
-
 }

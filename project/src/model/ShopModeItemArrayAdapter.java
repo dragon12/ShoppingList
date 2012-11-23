@@ -4,19 +4,18 @@ import java.util.List;
 
 import com.android.gers.shopping.list.ListViewStatusChangeListener;
 import com.android.gers.shopping.list.R;
+
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-public class ItemArrayAdapter 
+public class ShopModeItemArrayAdapter 
 		extends BaseItemArrayAdapter {
 	
-	public ItemArrayAdapter(Context context, ListViewStatusChangeListener listenerCb, int textViewResourceId, List<ShoppingListItem> results) {
+	public ShopModeItemArrayAdapter(Context context, ListViewStatusChangeListener listenerCb, int textViewResourceId, List<ShoppingListItem> results) {
 		super(context, listenerCb, textViewResourceId, results);
 		
 	}
@@ -27,8 +26,8 @@ public class ItemArrayAdapter
 		if (item != null) {
 			TextView itemQuantity = (TextView) v.findViewById(R.id.item_row_item_quantity);
 			TextView itemName = (TextView) v.findViewById(R.id.item_row_item_name);
-			CheckBox itemComplete = (CheckBox) v.findViewById(R.id.item_row_item_complete);
-
+			Button itemDone = (Button)v.findViewById(R.id.item_row_item_done);
+			
 			if (itemQuantity != null) {
 				String displayName = item.getQuantityType().getDisplayName();
 				itemQuantity.setText(item.getQuantity() + (displayName.length() > 0 ? " " + displayName : ""));
@@ -38,19 +37,15 @@ public class ItemArrayAdapter
 				itemName.setText(item.getDisplayName());
 			}
 			
-			if (itemComplete != null) {
-				itemComplete.setChecked(item.getComplete());
-		
+			if (itemDone != null) {
 				final int thisPosition = position;
-				itemComplete.setOnClickListener(new OnClickListener() {
-					
+				itemDone.setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
-						CheckBox box = (CheckBox)v.findViewById(R.id.item_row_item_complete);
-						listenerCb.statusChanged(thisPosition, v, box.isChecked()); 
+						Button box = (Button)v.findViewById(R.id.item_row_item_done);
+						listenerCb.statusChanged(thisPosition, v, true); 
 					}
 				});
 			}
-			
 		}
 	}
 

@@ -94,14 +94,14 @@ public class DbTableItems extends DbTableBase {
 		return qb.query(db, Columns, null, null, null, null, COL_ID);		
 	}
 	
-	public Cursor getItemsByListId(SQLiteDatabase db, long listId, Boolean noComplete) {
+	public Cursor getItemsByListId(SQLiteDatabase db, long listId, Boolean includeComplete) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(TABLE_NAME);
 		
 		qb.appendWhere(COL_LIST_ID + " = " + listId);
-		if (noComplete)
+		if (!includeComplete)
 		{
-			qb.appendWhere(COL_IS_COMPLETE + " = 0");
+			qb.appendWhere(" and " + COL_IS_COMPLETE + " = 0");
 		}
 		
 		return qb.query(db, Columns, null, null, null, null, COL_ID);		

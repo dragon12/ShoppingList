@@ -82,7 +82,7 @@ public class ListDataSource {
 		queryCursor.close();
 		
 		//now iterate over all the items in the other list and add them for this list, maintaining complete where appropriate
-		List<ShoppingListItem> itemsToDuplicate = getShoppingListItems(originalListId, false);
+		List<ShoppingListItem> itemsToDuplicate = getShoppingListItems(originalListId, true);
 		for (ShoppingListItem item : itemsToDuplicate) {
 			if (!keepComplete) {
 				item.setComplete(false);
@@ -208,9 +208,9 @@ public class ListDataSource {
 		return retVal;
 	}
 	
-	public List<ShoppingListItem> getShoppingListItems(long listId, Boolean noComplete) {
+	public List<ShoppingListItem> getShoppingListItems(long listId, Boolean includeComplete) {
 		List<ShoppingListItem> items = new ArrayList<ShoppingListItem>();
-		Cursor queryCursor = dbHelper.getItemsByListID(db, listId, noComplete);
+		Cursor queryCursor = dbHelper.getItemsByListID(db, listId, includeComplete);
 		
 		queryCursor.moveToFirst();
 		while(!queryCursor.isAfterLast()) {

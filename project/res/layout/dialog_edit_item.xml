@@ -7,24 +7,25 @@
     
     <TextView android:id="@+id/edit_item_display_name"
               android:layout_alignParentLeft="true"
-              android:layout_alignParentTop="true"
+              android:layout_alignBottom="@+id/edit_item_edit_name"
+              android:layout_alignTop="@+id/edit_item_edit_name"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginTop="20dp"
               android:text="@string/edit_item_label_name"
               android:textSize="20dp"
+              android:gravity="center_vertical"
         />
     <EditText android:id="@+id/edit_item_edit_name"
-              android:layout_alignParentRight="true"
+              android:layout_toRightOf="@+id/edit_item_display_name"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:inputType="textCapSentences"
-              android:layout_alignBottom="@+id/edit_item_display_name"
-              android:layout_toRightOf="@+id/edit_item_display_name"
+              android:layout_alignParentTop="true"
+              android:layout_marginTop="20dp"
+              android:inputType="textCapSentences|textMultiLine"
               android:layout_marginLeft="30dp"
               android:selectAllOnFocus="true"
               />
-
+              
     <!--  quantity row: label, editbox, spinner -->
     <TextView android:id="@+id/edit_item_display_quantity"
               android:layout_alignParentLeft="true"

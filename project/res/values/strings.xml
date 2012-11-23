@@ -28,5 +28,10 @@
     <string name="reset_done">Reset Done</string>
     <string name="clone_list_reset_to_incomplete">Reset to incomplete:</string>
     <string name="clone_list_name">Name:</string>
-    
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_shopping_list_shopping_mode">Shopping Mode</string>
+    <string name="shop_mode_heading_done">Done!</string>
+    <string name="shop_mode_undo_last">Undo Last</string>
+    <string name="shop_mode_done">DONE</string>
+
 </resources>

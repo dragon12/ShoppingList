@@ -86,8 +86,8 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 		return dbTableLists.getListById(db, id);		
 	}
 	
-	public Cursor getItemsByListID(SQLiteDatabase db, long listId, Boolean noComplete) {
-		return dbTableItems.getItemsByListId(db, listId, noComplete);
+	public Cursor getItemsByListID(SQLiteDatabase db, long listId, Boolean includeComplete) {
+		return dbTableItems.getItemsByListId(db, listId, includeComplete);
 	}
 	
 	public Cursor getItemsByID(SQLiteDatabase db, long itemId) {

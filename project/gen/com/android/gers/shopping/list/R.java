@@ -26,50 +26,57 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f09001a;
-        public static final int bottom_divider=0x7f090005;
-        public static final int button_add=0x7f090007;
-        public static final int button_layout=0x7f090006;
-        public static final int button_start_shop=0x7f090008;
-        public static final int clone_list_edit_name=0x7f09000f;
-        public static final int clone_list_keep_complete_check=0x7f090011;
-        public static final int clone_list_keep_complete_label=0x7f090010;
-        public static final int clone_list_name_label=0x7f09000e;
-        public static final int edit_item_display_name=0x7f090009;
-        public static final int edit_item_display_quantity=0x7f09000b;
-        public static final int edit_item_edit_name=0x7f09000a;
-        public static final int edit_item_edit_quantity=0x7f09000c;
-        public static final int edit_item_edit_quantity_type=0x7f09000d;
-        public static final int header_layout=0x7f090000;
-        public static final int item_row_item_complete=0x7f090016;
-        public static final int item_row_item_name=0x7f090015;
-        public static final int item_row_item_quantity=0x7f090014;
-        public static final int list_layout=0x7f090004;
-        public static final int list_name=0x7f090001;
-        public static final int list_row_list_date=0x7f090019;
-        public static final int list_row_list_name=0x7f090017;
-        public static final int list_row_list_stats=0x7f090018;
-        public static final int menu_add_list=0x7f09001e;
-        public static final int menu_reset_done=0x7f09001c;
-        public static final int menu_reset_to_test_db=0x7f09001d;
-        public static final int menu_settings=0x7f09001b;
-        public static final int rename_list_edit_name=0x7f090013;
-        public static final int rename_list_name_label=0x7f090012;
-        public static final int subheader_layout=0x7f090002;
-        public static final int top_divider=0x7f090003;
+        public static final int LinearLayout1=0x7f09001e;
+        public static final int bottom_divider=0x7f090006;
+        public static final int button_add=0x7f090008;
+        public static final int button_layout=0x7f090007;
+        public static final int button_start_shop=0x7f090009;
+        public static final int button_undo=0x7f09000b;
+        public static final int clone_list_edit_name=0x7f090012;
+        public static final int clone_list_keep_complete_check=0x7f090014;
+        public static final int clone_list_keep_complete_label=0x7f090013;
+        public static final int clone_list_name_label=0x7f090011;
+        public static final int edit_item_display_name=0x7f09000c;
+        public static final int edit_item_display_quantity=0x7f09000e;
+        public static final int edit_item_edit_name=0x7f09000d;
+        public static final int edit_item_edit_quantity=0x7f09000f;
+        public static final int edit_item_edit_quantity_type=0x7f090010;
+        public static final int header_layout=0x7f090001;
+        public static final int item_row_item_complete=0x7f090019;
+        public static final int item_row_item_done=0x7f09001d;
+        public static final int item_row_item_name=0x7f090018;
+        public static final int item_row_item_quantity=0x7f090017;
+        public static final int list_layout=0x7f090005;
+        public static final int list_name=0x7f090002;
+        public static final int list_row_list_date=0x7f09001c;
+        public static final int list_row_list_name=0x7f09001a;
+        public static final int list_row_list_stats=0x7f09001b;
+        public static final int menu_add_list=0x7f090022;
+        public static final int menu_reset_done=0x7f090020;
+        public static final int menu_reset_to_test_db=0x7f090021;
+        public static final int menu_settings=0x7f09001f;
+        public static final int rename_list_edit_name=0x7f090016;
+        public static final int rename_list_name_label=0x7f090015;
+        public static final int shopping_list_items=0x7f090000;
+        public static final int shopping_list_shop_mode=0x7f09000a;
+        public static final int subheader_layout=0x7f090003;
+        public static final int top_divider=0x7f090004;
     }
     public static final class layout {
         public static final int activity_shopping_list_items=0x7f030000;
-        public static final int dialog_edit_item=0x7f030001;
-        public static final int dialog_list_clone=0x7f030002;
-        public static final int dialog_list_name=0x7f030003;
-        public static final int item_row=0x7f030004;
-        public static final int list_row=0x7f030005;
-        public static final int shopping_list_activity=0x7f030006;
+        public static final int activity_shopping_list_shopping_mode=0x7f030001;
+        public static final int dialog_edit_item=0x7f030002;
+        public static final int dialog_list_clone=0x7f030003;
+        public static final int dialog_list_name=0x7f030004;
+        public static final int item_row=0x7f030005;
+        public static final int list_row=0x7f030006;
+        public static final int shop_mode_item_row=0x7f030007;
+        public static final int shopping_list_activity=0x7f030008;
     }
     public static final class menu {
         public static final int activity_shopping_list_items=0x7f080000;
-        public static final int shopping_list_activity=0x7f080001;
+        public static final int activity_shopping_list_shopping_mode=0x7f080001;
+        public static final int shopping_list_activity=0x7f080002;
     }
     public static final class string {
         public static final int add_item=0x7f06000e;
@@ -87,6 +94,7 @@ public final class R {
         public static final int edit_item_label_name=0x7f060012;
         public static final int edit_item_label_quantity=0x7f060015;
         public static final int front_existing_lists=0x7f060003;
+        public static final int hello_world=0x7f06001c;
         public static final int items_heading_done=0x7f060011;
         public static final int items_heading_name=0x7f060013;
         public static final int items_heading_quantity=0x7f060014;
@@ -94,12 +102,16 @@ public final class R {
         public static final int menu_settings=0x7f060001;
         public static final int rename_list=0x7f06000b;
         public static final int reset_done=0x7f060019;
+        public static final int shop_mode_done=0x7f060020;
+        public static final int shop_mode_heading_done=0x7f06001e;
+        public static final int shop_mode_undo_last=0x7f06001f;
         public static final int test_db_data_items=0x7f060006;
         public static final int test_db_data_lists=0x7f060005;
         public static final int test_db_name=0x7f060004;
         public static final int title_activity_shopping_list_front=0x7f060002;
         public static final int title_activity_shopping_list_item_details=0x7f06000f;
         public static final int title_activity_shopping_list_items=0x7f060009;
+        public static final int title_activity_shopping_list_shopping_mode=0x7f06001d;
     }
     public static final class style {
         public static final int AppTheme=0x7f070000;
