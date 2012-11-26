@@ -28,7 +28,7 @@ public abstract class DbTableBase {
 	}
 	
 	public void drop(SQLiteDatabase db) {
-		Log.i(ShoppingList.LOG_NAME, "Upgrading db, deleting all items in old table " + tableName + "!");
+		Log.d(ShoppingList.LOG_NAME, "Upgrading db, deleting all items in old table " + tableName + "!");
 		db.execSQL("drop table if exists " + tableName);
 	}
 	

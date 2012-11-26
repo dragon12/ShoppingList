@@ -29,7 +29,7 @@ public class DebugDbHelper {
      * @param context
      */
     public DebugDbHelper(Context context, SQLiteOpenHelper helper) {
-    	Log.i(ShoppingList.LOG_NAME, "DebugDbHelper starting up");
+    	Log.d(ShoppingList.LOG_NAME, "DebugDbHelper starting up");
     	 
         this.myContext = context;
         this.helper = helper;
@@ -48,17 +48,17 @@ public class DebugDbHelper {
  
     	if (dbExist) {
     		//do nothing - database already exist
-    		Log.i(ShoppingList.LOG_NAME, "Db already existed");
+    		Log.d(ShoppingList.LOG_NAME, "Db already existed");
     	} else {
     		//By calling this method and empty database will be created into the default system path
                //of your application so we are gonna be able to overwrite that database with our database.
         	helper.getReadableDatabase();
  
         	try {
-        		Log.i(ShoppingList.LOG_NAME, "About to copy the db");
+        		Log.d(ShoppingList.LOG_NAME, "About to copy the db");
     			copyDb();
-    			Log.i(ShoppingList.LOG_NAME, "Copied db");
-    			Log.i(ShoppingList.LOG_NAME, "db is at: " + helper.getReadableDatabase().getPath());
+    			Log.d(ShoppingList.LOG_NAME, "Copied db");
+    			Log.d(ShoppingList.LOG_NAME, "db is at: " + helper.getReadableDatabase().getPath());
     		} catch (IOException e) {
         		throw new Error("Error copying database");
         	}

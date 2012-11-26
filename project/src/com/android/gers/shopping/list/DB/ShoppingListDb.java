@@ -100,14 +100,14 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 	
 	public Boolean deleteListById(SQLiteDatabase db, long id) {
 		if (deleteItemsByListId(db, id)) {
-			Log.i(ShoppingList.LOG_NAME, "calling deleteListById");
+			Log.d(ShoppingList.LOG_NAME, "calling deleteListById");
 			return dbTableLists.deleteListById(db, id);	
 		}
 		return false;
 	}
 
 	public Boolean deleteItemsByListId(SQLiteDatabase db, long listId) {
-		Log.i(ShoppingList.LOG_NAME, "deleteItemsByListId");
+		Log.d(ShoppingList.LOG_NAME, "deleteItemsByListId");
 		return dbTableItems.deleteItemsByListId(db, listId);
 	}
 	
@@ -117,7 +117,7 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 	
 	private static void createIfNotPresent(SQLiteDatabase db, DbTableBase dbTable) {
 		if (!dbTable.exists(db)) {
-			Log.i(ShoppingList.LOG_NAME, "table " + dbTable.getName() + " doesn't exist, creating");
+			Log.d(ShoppingList.LOG_NAME, "table " + dbTable.getName() + " doesn't exist, creating");
 			dbTable.create(db);
 		}
 	}

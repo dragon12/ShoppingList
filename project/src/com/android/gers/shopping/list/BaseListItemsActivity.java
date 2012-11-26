@@ -6,7 +6,6 @@ import com.android.gers.shopping.list.DB.DbTableItems;
 import com.android.gers.shopping.list.DB.ShoppingListDb;
 
 import model.BaseItemArrayAdapter;
-import model.ItemArrayAdapter;
 import model.ListDataSource;
 import model.ShoppingListItem;
 import model.ShoppingListList;
@@ -43,13 +42,13 @@ public abstract class BaseListItemsActivity
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i(ShoppingList.LOG_NAME, "onCreate called");
+		Log.d(ShoppingList.LOG_NAME, "onCreate called");
 		super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(viewResourceId);
 
 		if (savedInstanceState != null) {
-			Log.i(ShoppingList.LOG_NAME, "saved state non-null");
+			Log.d(ShoppingList.LOG_NAME, "saved state non-null");
 		}
 
 		this.getListView().setDividerHeight(1);
@@ -65,7 +64,7 @@ public abstract class BaseListItemsActivity
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.i(ShoppingList.LOG_NAME, "onPause called");
+		Log.d(ShoppingList.LOG_NAME, "onPause called");
 		SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
 		
@@ -77,16 +76,16 @@ public abstract class BaseListItemsActivity
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.i(ShoppingList.LOG_NAME, "onResume called");
+		Log.d(ShoppingList.LOG_NAME, "onResume called");
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			if (extras.containsKey(DbTableItems.COL_LIST_ID)) {
-				Log.i(ShoppingList.LOG_NAME, "extras does contain our key");
+				Log.d(ShoppingList.LOG_NAME, "extras does contain our key");
 			}
 
 			originatingListId = extras.getLong(DbTableItems.COL_LIST_ID);
-			Log.i(ShoppingList.LOG_NAME, "Originating was " + originatingListId);
+			Log.d(ShoppingList.LOG_NAME, "Originating was " + originatingListId);
 
 		} else {
 			SharedPreferences prefs = getPreferences(MODE_PRIVATE);
@@ -111,7 +110,7 @@ public abstract class BaseListItemsActivity
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		Log.i(ShoppingList.LOG_NAME, "onSaveInstanceState called");
+		Log.d(ShoppingList.LOG_NAME, "onSaveInstanceState called");
 		outState.putLong("originatingListId", originatingListId);
 		super.onSaveInstanceState(outState);
 	}
@@ -120,7 +119,7 @@ public abstract class BaseListItemsActivity
 	    // Always call the superclass so it can restore the view hierarchy
 	    super.onRestoreInstanceState(savedInstanceState);
 	   
-	    Log.i(ShoppingList.LOG_NAME, "onRestoreInstanceState called");
+	    Log.d(ShoppingList.LOG_NAME, "onRestoreInstanceState called");
 	}
 	
 	public void statusChanged(int listPosition, View triggeredView, boolean isOn) {
@@ -135,7 +134,7 @@ public abstract class BaseListItemsActivity
     protected void onListItemClick(ListView l, View v, int position, long id) {
     	super.onListItemClick(l, v, position, id);
     	
-    	Log.i(ShoppingList.LOG_NAME, "onListItemClick position " + position + ", id " + id);
+    	Log.d(ShoppingList.LOG_NAME, "onListItemClick position " + position + ", id " + id);
     	ShoppingListItem itemClicked = (ShoppingListItem) l.getItemAtPosition(position);
     	
     	listItemClicked(itemClicked, position);
@@ -161,7 +160,7 @@ public abstract class BaseListItemsActivity
     protected abstract BaseItemArrayAdapter createAdapter(List<ShoppingListItem> items);
     
     protected void reloadListDisplay() {
-    	Log.i(ShoppingList.LOG_NAME, "reloadListDisplay");
+    	Log.d(ShoppingList.LOG_NAME, "reloadListDisplay");
         List<ShoppingListItem> items = dataSource.getShoppingListItems(originatingListId, includeComplete);
         
         BaseItemArrayAdapter adapter = createAdapter(items);

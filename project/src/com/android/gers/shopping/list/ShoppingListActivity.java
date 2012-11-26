@@ -67,9 +67,9 @@ public class ShoppingListActivity
         
         dbHelper = new ShoppingListDb(this);
         
-        Log.i(ShoppingList.LOG_NAME, "about to create data source");
+        Log.d(ShoppingList.LOG_NAME, "about to create data source");
         dataSource = new ListDataSource(this, dbHelper);
-        Log.i(ShoppingList.LOG_NAME, "Created data source");
+        Log.d(ShoppingList.LOG_NAME, "Created data source");
         
         dataSource.open();
         
@@ -86,9 +86,9 @@ public class ShoppingListActivity
     protected void onListItemClick(ListView l, View v, int position, long id) {
     	super.onListItemClick(l, v, position, id);
     	
-    	Log.i(ShoppingList.LOG_NAME, "onListItemClick position " + position + ", id " + id);
+    	Log.d(ShoppingList.LOG_NAME, "onListItemClick position " + position + ", id " + id);
     	ShoppingListList listChosen = (ShoppingListList) l.getItemAtPosition(position);
-    	Log.i(ShoppingList.LOG_NAME, "corresponds to list: " + listChosen.toString() + "(which has id " + listChosen.getId() + ")");
+    	Log.d(ShoppingList.LOG_NAME, "corresponds to list: " + listChosen.toString() + "(which has id " + listChosen.getId() + ")");
     	Intent i = new Intent(this, ShoppingListItemsActivity.class);
     	i.putExtra(DbTableItems.COL_LIST_ID, listChosen.getId());
     	
@@ -203,7 +203,7 @@ public class ShoppingListActivity
     }
 
 	private void displayAddListDialog() {
-		Log.i(ShoppingList.LOG_NAME, "displayAddListDialog");
+		Log.d(ShoppingList.LOG_NAME, "displayAddListDialog");
 		editDialogState = EditDialogState.ADD;
 		showListNameEditDialog("Add New List");
 	}
@@ -244,7 +244,7 @@ public class ShoppingListActivity
     				case DIALOG_ID_LIST_EDIT_NAME:
     					EditText inputText = (EditText)alertView.findViewById(R.id.rename_list_edit_name);
     					String valueEntered = inputText.getText().toString();
-    					Log.i(ShoppingList.LOG_NAME, "User entered " + valueEntered + "!");
+    					Log.d(ShoppingList.LOG_NAME, "User entered " + valueEntered + "!");
     					
     					if (editDialogState == EditDialogState.ADD) {
     						ShoppingListList listToAdd = new ShoppingListList(valueEntered);
@@ -294,7 +294,7 @@ public class ShoppingListActivity
     					CheckBox cloneBox = (CheckBox)alertView.findViewById(R.id.clone_list_keep_complete_check);
     					Boolean keepComplete = !cloneBox.isChecked();
     					
-    					Log.i(ShoppingList.LOG_NAME, "User entered " + clonedName + ", keep_complete = " + keepComplete.toString());
+    					Log.d(ShoppingList.LOG_NAME, "User entered " + clonedName + ", keep_complete = " + keepComplete.toString());
     					ShoppingListList listToAdd = new ShoppingListList(clonedName);
 
     					//clone the list in our db

@@ -4,18 +4,13 @@ import java.util.List;
 
 import com.android.gers.shopping.list.SimpleInputDialog.DialogClickListener;
 import com.android.gers.shopping.list.DB.DbTableItems;
-import com.android.gers.shopping.list.DB.ShoppingListDb;
-
 import model.BaseItemArrayAdapter;
 import model.ItemArrayAdapter;
-import model.ListDataSource;
 import model.QuantityType;
 import model.ShoppingListItem;
-import model.ShoppingListList;
 import android.os.Bundle;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
@@ -29,10 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.SlidingDrawer;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -98,7 +90,7 @@ public class ShoppingListItemsActivity
     }
     
     private void itemAddButtonClicked() {
-		Log.i(ShoppingList.LOG_NAME, "itemAddButtonClicked");
+		Log.d(ShoppingList.LOG_NAME, "itemAddButtonClicked");
 		
 		AlertDialog dialog = showEditDialog("Add New Item");
 		dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
@@ -107,7 +99,7 @@ public class ShoppingListItemsActivity
 	}
     
     private void startShopButtonClicked() {
-    	Log.i(ShoppingList.LOG_NAME, "startShopButtonClicked");
+    	Log.d(ShoppingList.LOG_NAME, "startShopButtonClicked");
     	Intent i = new Intent(this, ShoppingListShoppingMode.class);
     	i.putExtra(DbTableItems.COL_LIST_ID, originatingListId);
     	
@@ -150,10 +142,10 @@ public class ShoppingListItemsActivity
     
     // handles checkbox changes in the listview
 	public void statusChanged(int listPosition, View triggeredView, boolean isOn) {
-		Log.i(ShoppingList.LOG_NAME, "checkBoxChanged, position " + listPosition);
+		Log.d(ShoppingList.LOG_NAME, "checkBoxChanged, position " + listPosition);
 		
     	ShoppingListItem itemChecked = (ShoppingListItem) getListView().getItemAtPosition(listPosition);
-    	Log.i(ShoppingList.LOG_NAME, "corresponds to item: " + itemChecked.toString() + "(which has id " + itemChecked.getId() + ")");
+    	Log.d(ShoppingList.LOG_NAME, "corresponds to item: " + itemChecked.toString() + "(which has id " + itemChecked.getId() + ")");
 
     	itemChecked.setComplete(isOn);
     	updateItemInDb(itemChecked);
@@ -240,7 +232,7 @@ public class ShoppingListItemsActivity
         	int qty = Integer.parseInt(quantityBox.getText().toString());
         	QuantityType qtyType = (QuantityType)quantityTypeSpinner.getSelectedItem();
 
-        	Log.i(ShoppingList.LOG_NAME, "User entered " + name + "!");
+        	Log.d(ShoppingList.LOG_NAME, "User entered " + name + "!");
 
         	switch(currentState)
         	{
@@ -277,7 +269,7 @@ public class ShoppingListItemsActivity
         	break;
         }
 		default:
-			Log.i(ShoppingList.LOG_NAME, "non-positive button pressed");
+			Log.d(ShoppingList.LOG_NAME, "non-positive button pressed");
 			break;
 		}
     	currentState = DialogState.NONE;

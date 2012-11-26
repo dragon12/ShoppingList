@@ -82,7 +82,7 @@ public class DbTableLists extends DbTableBase {
 
 	@Override	
 	public void create(SQLiteDatabase db) {
-		Log.i(ShoppingList.LOG_NAME, "table " + TABLE_NAME + " doesn't exist, creating table");
+		Log.d(ShoppingList.LOG_NAME, "table " + TABLE_NAME + " doesn't exist, creating table");
 		String sql = 
 				"CREATE TABLE " + TABLE_NAME + "(" + 
 						COL_ID + " integer primary key autoincrement, " +
@@ -91,7 +91,7 @@ public class DbTableLists extends DbTableBase {
 						COL_IS_COMPLETE + " boolean not null DEFAULT 0, " +
 						COL_IS_DELETED + " boolean not null DEFAULT 0" +
 								")";
-		Log.i(ShoppingList.LOG_NAME, "Creating lists table with sql command: " + sql);
+		Log.d(ShoppingList.LOG_NAME, "Creating lists table with sql command: " + sql);
 		
 		db.execSQL(sql);
 	}

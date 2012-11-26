@@ -26,21 +26,21 @@ public class ListDataSource {
 	}
 
 	public void open() throws SQLException {
-		Log.i(ShoppingList.LOG_NAME, "Opening db");
+		Log.d(ShoppingList.LOG_NAME, "Opening db");
 		db = dbHelper.getWritableDatabase();
 	}
 	
 	public void close() {
-		Log.i(ShoppingList.LOG_NAME, "Closing db");
+		Log.d(ShoppingList.LOG_NAME, "Closing db");
 		db.close();
 	}
 	
 	public ShoppingListList createList(ShoppingListList newList) throws Exception {
-		Log.i(ShoppingList.LOG_NAME, "Inserting new shopping list with name: " + newList.getName());
+		Log.d(ShoppingList.LOG_NAME, "Inserting new shopping list with name: " + newList.getName());
 		
-		Log.i(ShoppingList.LOG_NAME, "before insert list");
+		Log.d(ShoppingList.LOG_NAME, "before insert list");
 		long insertId = dbHelper.insertList(db, newList.getName());
-		Log.i(ShoppingList.LOG_NAME, "after insert list");
+		Log.d(ShoppingList.LOG_NAME, "after insert list");
 		
 		Cursor queryCursor = dbHelper.getListById(db, insertId);
 		queryCursor.moveToFirst();
@@ -48,24 +48,24 @@ public class ListDataSource {
 			throw new Exception("We added an item but then it wasn't there!");
 		}
 		ShoppingListList retVal = cursorToShoppingList(queryCursor);
-		Log.i(ShoppingList.LOG_NAME, "Inserted new list: " + retVal.toString());
+		Log.d(ShoppingList.LOG_NAME, "Inserted new list: " + retVal.toString());
 		
 		queryCursor.close();
 		return retVal;
 	}
 
 	public Boolean updateList(ShoppingListList editList) throws Exception {
-		Log.i(ShoppingList.LOG_NAME, "Updating list: " + editList.toString());
+		Log.d(ShoppingList.LOG_NAME, "Updating list: " + editList.toString());
 		
 		ContentValues kvps = shoppingListListToContentValues(editList);
 		Boolean retVal = dbHelper.updateList(db, editList.getId(), kvps);
 		
-		Log.i(ShoppingList.LOG_NAME, "Updated list");
+		Log.d(ShoppingList.LOG_NAME, "Updated list");
 		return retVal;
 	}
 	
 	public ShoppingListList cloneList(long originalListId, ShoppingListList clonedList, Boolean keepComplete) throws Exception {
-		Log.i(ShoppingList.LOG_NAME, "Cloning list " + originalListId + " to list with name " + clonedList.getName());
+		Log.d(ShoppingList.LOG_NAME, "Cloning list " + originalListId + " to list with name " + clonedList.getName());
 		
 		//insert the new list
 		long insertId = dbHelper.insertList(db, clonedList.getName());
@@ -77,7 +77,7 @@ public class ListDataSource {
 			throw new Exception("We added an item but then it wasn't there!");
 		}
 		ShoppingListList retVal = cursorToShoppingList(queryCursor);
-		Log.i(ShoppingList.LOG_NAME, "Inserted new list: " + retVal.toString());
+		Log.d(ShoppingList.LOG_NAME, "Inserted new list: " + retVal.toString());
 		
 		queryCursor.close();
 		
@@ -95,7 +95,7 @@ public class ListDataSource {
 	}
 	
 	public ShoppingListItem createItem(ShoppingListItem newItem) throws Exception {
-		Log.i(ShoppingList.LOG_NAME, "Inserting new item: " + newItem.toString());
+		Log.d(ShoppingList.LOG_NAME, "Inserting new item: " + newItem.toString());
 		
 		ContentValues kvps = shoppingListItemToContentValues(newItem);
 		long insertId = dbHelper.insertItem(db, kvps);
@@ -107,24 +107,24 @@ public class ListDataSource {
 			throw new Exception("We added an item but then it wasn't there!");
 		}
 		ShoppingListItem retVal = cursorToShoppingListItem(queryCursor);
-		Log.i(ShoppingList.LOG_NAME, "Inserted new item: " + retVal.toString());
+		Log.d(ShoppingList.LOG_NAME, "Inserted new item: " + retVal.toString());
 		
 		queryCursor.close();
 		return retVal;
 	}
 	
 	public Boolean updateItem(ShoppingListItem editItem) throws Exception {
-		Log.i(ShoppingList.LOG_NAME, "Updating item: " + editItem.toString());
+		Log.d(ShoppingList.LOG_NAME, "Updating item: " + editItem.toString());
 		
 		ContentValues kvps = shoppingListItemToContentValues(editItem);
 		Boolean retVal = dbHelper.updateItem(db, editItem.getId(), kvps);
 		
-		Log.i(ShoppingList.LOG_NAME, "Updated item");
+		Log.d(ShoppingList.LOG_NAME, "Updated item");
 		return retVal;
 	}
 	
 	public void setAllListItemsCompleteState(long listId, Boolean newState) {
-		Log.i(ShoppingList.LOG_NAME, "Updating all items with list id " + listId + " to have new complete state " + newState.toString());
+		Log.d(ShoppingList.LOG_NAME, "Updating all items with list id " + listId + " to have new complete state " + newState.toString());
 		
 		ContentValues kvps = new ContentValues();
 		kvps.put(DbTableItems.COL_IS_COMPLETE, newState ? 1 : 0);
@@ -134,10 +134,10 @@ public class ListDataSource {
 	
 	
 	public void deleteList(ShoppingListList deleteList) {
-		Log.i(ShoppingList.LOG_NAME, "About to delete this shopping list: " + deleteList.toString());
+		Log.d(ShoppingList.LOG_NAME, "About to delete this shopping list: " + deleteList.toString());
 		
 		if(dbHelper.deleteListById(db, deleteList.getId())) {
-			Log.i(ShoppingList.LOG_NAME, "Successfully deleted list");
+			Log.d(ShoppingList.LOG_NAME, "Successfully deleted list");
 		} else {
 			Log.e(ShoppingList.LOG_NAME, "Couldn't delete list with id " + deleteList.getId() + "!");
 		}
@@ -145,7 +145,7 @@ public class ListDataSource {
 	
 	public void deleteItem(ShoppingListItem deleteItem) {
 		if(dbHelper.deleteItemById(db, deleteItem.getId())) {
-			Log.i(ShoppingList.LOG_NAME, "Successfully deleted item");
+			Log.d(ShoppingList.LOG_NAME, "Successfully deleted item");
 		} else {
 			Log.e(ShoppingList.LOG_NAME, "Couldn't delete item with id " + deleteItem.getId() + "!");
 		}
