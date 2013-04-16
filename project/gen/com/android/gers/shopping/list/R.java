@@ -51,9 +51,10 @@ public final class R {
         public static final int list_row_list_date=0x7f09001c;
         public static final int list_row_list_name=0x7f09001a;
         public static final int list_row_list_stats=0x7f09001b;
-        public static final int menu_add_list=0x7f090021;
-        public static final int menu_export=0x7f090022;
-        public static final int menu_import=0x7f090023;
+        public static final int menu_add_list=0x7f090022;
+        public static final int menu_export=0x7f090023;
+        public static final int menu_import=0x7f090024;
+        public static final int menu_purge_done=0x7f090021;
         public static final int menu_reset_done=0x7f090020;
         public static final int menu_settings=0x7f09001f;
         public static final int rename_list_edit_name=0x7f090016;
@@ -103,6 +104,7 @@ public final class R {
         public static final int menu_import=0x7f060022;
         public static final int menu_reset_to_test_db=0x7f060007;
         public static final int menu_settings=0x7f060001;
+        public static final int purge_done=0x7f060023;
         public static final int rename_list=0x7f06000b;
         public static final int reset_done=0x7f060019;
         public static final int shop_mode_done=0x7f060020;

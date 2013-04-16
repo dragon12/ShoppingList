@@ -35,5 +35,6 @@
     <string name="shop_mode_done">DONE</string>
     <string name="menu_export">Export</string>
     <string name="menu_import">Import</string>
+    <string name="purge_done">Purge Done</string>
 
 </resources>

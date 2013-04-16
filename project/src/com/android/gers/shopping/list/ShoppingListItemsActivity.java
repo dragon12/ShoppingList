@@ -33,7 +33,7 @@ public class ShoppingListItemsActivity
 	implements 
 			DialogClickListener,
 			OnClickListener
-			 {
+{
 	
 	private static final int CONTEXT_MENU_DELETE_ID = Menu.FIRST + 1;
 	
@@ -130,10 +130,16 @@ public class ShoppingListItemsActivity
     
     
     private void resetButtonClicked() {
-    	//CheckBox box = (CheckBox)findViewById(R.id.select_deselect_all);
-    	
     	dataSource.setAllListItemsCompleteState(originatingListId, false);
-    	
+    	refreshListDisplay();
+    }
+
+    private void purgeButtonClicked() {
+    	dataSource.deleteItemsWhereComplete(originatingListId);
+    	refreshListDisplay();
+    }
+    
+    private void refreshListDisplay() {
     	List<ShoppingListItem> items = dataSource.getShoppingListItems(originatingListId, true);
         
     	((ItemArrayAdapter)getListAdapter()).clear();
@@ -157,6 +163,9 @@ public class ShoppingListItemsActivity
 		{
 			case R.id.menu_reset_done:
 				resetButtonClicked();
+				return true;
+			case R.id.menu_purge_done:
+				purgeButtonClicked();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);

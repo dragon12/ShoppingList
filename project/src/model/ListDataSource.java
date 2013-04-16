@@ -132,6 +132,14 @@ public class ListDataSource {
 		dbHelper.updateByListId(db, listId, kvps);
 	}
 	
+	public void deleteItemsWhereComplete(long listId) {
+		Log.d(ShoppingList.LOG_NAME, "Deleting all complete items with list id " + listId);
+		
+		ContentValues kvps = new ContentValues();
+		kvps.put(DbTableItems.COL_IS_COMPLETE, 1);
+		
+		dbHelper.deleteByListId(db, listId, kvps);		
+	}
 	
 	public void deleteList(ShoppingListList deleteList) {
 		Log.d(ShoppingList.LOG_NAME, "About to delete this shopping list: " + deleteList.toString());

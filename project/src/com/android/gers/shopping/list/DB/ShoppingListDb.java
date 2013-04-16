@@ -150,6 +150,10 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 	public Boolean updateByListId(SQLiteDatabase db, long listId, ContentValues kvps) {
 		return dbTableItems.updateByListId(db, listId, kvps);
 	}
+	
+	public Boolean deleteByListId(SQLiteDatabase db, long listId, ContentValues whereKvps) {
+		return dbTableItems.deleteItemsByListIdWhere(db, listId, whereKvps);
+	}
 
 	public Cursor getAllLists(SQLiteDatabase db, Boolean noComplete) {
 		return dbTableLists.getAllLists(db, noComplete);

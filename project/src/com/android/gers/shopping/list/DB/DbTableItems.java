@@ -1,5 +1,8 @@
 package com.android.gers.shopping.list.DB;
 
+import java.util.Map.Entry;
+import java.util.Set;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -125,6 +128,19 @@ public class DbTableItems extends DbTableBase {
 	//  has any items
 	public Boolean deleteItemsByListId(SQLiteDatabase db, long listId) {
 		db.delete(TABLE_NAME, COL_LIST_ID + " = " + listId, null);
+		return true;
+	}
+	
+	public Boolean deleteItemsByListIdWhere(SQLiteDatabase db, long listId, ContentValues whereKvps) {
+		StringBuilder whereClause = new StringBuilder();
+		Set<Entry<String, Object>> kvpSet = whereKvps.valueSet();
+		for (Entry<String, Object> kvp : kvpSet) {
+			if (whereClause.length() != 0) {
+				whereClause.append(" and ");
+			}
+			whereClause = whereClause.append(kvp.getKey()).append(" = ").append(kvp.getValue().toString());
+		}
+		db.delete(TABLE_NAME, whereClause.toString(), null);
 		return true;
 	}
 	
