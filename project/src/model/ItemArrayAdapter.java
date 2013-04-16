@@ -5,11 +5,8 @@ import java.util.List;
 import com.android.gers.shopping.list.ListViewStatusChangeListener;
 import com.android.gers.shopping.list.R;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -31,7 +28,15 @@ public class ItemArrayAdapter
 
 			if (itemQuantity != null) {
 				String displayName = item.getQuantityType().getDisplayName();
-				itemQuantity.setText(item.getQuantity() + (displayName.length() > 0 ? " " + displayName : ""));
+				
+				StringBuilder displayQty = new StringBuilder(item.getQuantity().toString());
+				if (displayQty.substring(displayQty.length() - 2).equals(".0")) {
+					displayQty = displayQty.delete(displayQty.length() - 2, displayQty.length());
+				}
+				if (displayName.length() > 0) {
+					displayQty = displayQty.append(" ").append(displayName); 
+				}
+				itemQuantity.setText(displayQty.toString());
 			}
 			
 			if (itemName != null){

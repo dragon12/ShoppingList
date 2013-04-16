@@ -42,7 +42,7 @@
     <EditText android:id="@+id/edit_item_edit_quantity"
               android:layout_width="100dp"
               android:layout_height="wrap_content"
-              android:inputType="number"
+              android:inputType="numberDecimal"
               android:layout_alignBottom="@+id/edit_item_display_quantity"
               android:layout_alignLeft="@+id/edit_item_edit_name"
               android:text="@string/edit_item_default_quantity"

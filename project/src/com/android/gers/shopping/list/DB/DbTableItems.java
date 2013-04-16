@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 
 public class DbTableItems extends DbTableBase {
 	
-	private static final String TABLE_NAME = "items";
+	public static final String TABLE_NAME = "items";
 
 	public static final String COL_ID = BaseColumns._ID;
 	public static final int COL_IDX_ID = 0;
@@ -65,7 +65,7 @@ public class DbTableItems extends DbTableBase {
 						COL_ID + " integer primary key autoincrement, " +
 						COL_LIST_ID + " integer not null REFERENCES " + foreignTable + "(" + foreignColumn + ")," +
 						COL_NAME + " text not null, " +
-						COL_QUANTITY + " integer not null, " +
+						COL_QUANTITY + " double not null, " +
 						COL_QUANTITY_TYPE + " text not null, " +
 						COL_IS_COMPLETE + " integer not null DEFAULT 0)";
 						

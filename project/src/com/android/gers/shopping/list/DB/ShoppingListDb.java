@@ -1,9 +1,18 @@
 package com.android.gers.shopping.list.DB;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 import com.android.gers.shopping.list.ShoppingList;
 
+import Utils.DbFromXml;
+import Utils.DbToXml;
+import Utils.FileUtils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -38,10 +47,7 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		dbTableItems.drop(db);
-		dbTableLists.drop(db);
-		
-		onCreate(db);
+		recreate(db);
 	}
 	
 	public void deleteDb() {
@@ -51,6 +57,73 @@ public class ShoppingListDb extends SQLiteOpenHelper {
 	
 	public void createTestDb() throws IOException {
 		debugHelper.CreateTestDB();
+	}
+	
+	public boolean exportDbAsXml(String fileName) {
+		BufferedOutputStream outputStream;
+		try {
+			File file = new File(fileName);
+			if (file.exists()) {
+				file.delete();
+			}
+				
+			outputStream = FileUtils.OpenFileForWriting(fileName);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		DbToXml dbToXml = new DbToXml(getReadableDatabase(), outputStream, ShoppingList.DB.DB_VERSION);
+		
+		dbToXml.Execute();
+		
+		return true;
+	}
+	
+	private void recreate(SQLiteDatabase db) {
+		dbTableItems.drop(db);
+		dbTableLists.drop(db);
+		
+		onCreate(db);
+	}
+	
+	public boolean importDbAsXml(String fileName) throws Exception {
+		InputStream inputStream;
+		try {
+			File file = new File(fileName);
+			if (!file.exists()) {
+				Log.e(ShoppingList.LOG_NAME, "file " + file + " does not exist");
+			}
+				
+			inputStream = FileUtils.GetFileStream(fileName);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		DbFromXml dbFromXml = new DbFromXml(inputStream);
+		HashMap<String, List<ContentValues>> tablesToRows = dbFromXml.Execute();
+		
+		if (tablesToRows.size() == 0) {
+			throw new Exception("Can't import empty xml file");
+		}
+		
+		SQLiteDatabase db = getWritableDatabase();
+
+		recreate(db);
+		for (Entry<String, List<ContentValues>> item : tablesToRows.entrySet()) {
+			for (ContentValues row : item.getValue()) {
+				if (item.getKey().equals(DbTableLists.TABLE_NAME)) {
+					insertList(db, row);
+				} else if (item.getKey().equals(DbTableItems.TABLE_NAME)) {
+					insertItem(db, row);
+				} else {
+					throw new Exception("Unknown table: " + item.getKey());
+				}
+			}
+		}
+		return true;
 	}
 	
 	public long insertList(SQLiteDatabase db, String listName) {

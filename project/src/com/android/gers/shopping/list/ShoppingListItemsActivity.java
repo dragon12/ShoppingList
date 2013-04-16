@@ -229,7 +229,7 @@ public class ShoppingListItemsActivity
         	Spinner quantityTypeSpinner = (Spinner)editAlertView.findViewById(R.id.edit_item_edit_quantity_type);
         	
         	String name = nameBox.getText().toString();
-        	int qty = Integer.parseInt(quantityBox.getText().toString());
+        	double qty = Double.parseDouble(quantityBox.getText().toString());
         	QuantityType qtyType = (QuantityType)quantityTypeSpinner.getSelectedItem();
 
         	Log.d(ShoppingList.LOG_NAME, "User entered " + name + "!");

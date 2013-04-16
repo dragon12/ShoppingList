@@ -4,7 +4,7 @@ public class ShoppingListItem {
 	private long id;
 	private long listId;
 	private String name;
-	private Integer quantity;
+	private double quantity;
 	private QuantityType quantityType;
 	private Boolean complete;
 	
@@ -29,12 +29,16 @@ public class ShoppingListItem {
 
 		return false;
 	}
-
-	public ShoppingListItem(long listId, String name, int quantity, QuantityType quantityType, Boolean complete) {
-		this(-1, listId, name, quantity, quantityType, complete);
+	
+	public int hashCode() {
+		return (int)id;
 	}
 
-	public ShoppingListItem(long id, long listId, String name, int quantity, QuantityType quantityType, Boolean complete) {
+	public ShoppingListItem(long listId, String name, double qty, QuantityType quantityType, Boolean complete) {
+		this(-1, listId, name, qty, quantityType, complete);
+	}
+
+	public ShoppingListItem(long id, long listId, String name, double quantity, QuantityType quantityType, Boolean complete) {
 		this.id = id;
 		this.listId = listId;
 		this.name = name;
@@ -59,7 +63,7 @@ public class ShoppingListItem {
 		this.listId = listId;
 	}
 
-	public Integer getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 

@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class ListArrayAdapter extends ArrayAdapter<ShoppingListList> {
-	private static List<ShoppingListList> shoppingLists;
+	private List<ShoppingListList> shoppingLists;
 	private HashMap<Long, ShoppingListItemStats> stats = null;
 
 	public ListArrayAdapter(Context context, int textViewResourceId, List<ShoppingListList> results) {

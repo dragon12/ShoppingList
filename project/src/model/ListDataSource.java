@@ -256,7 +256,7 @@ public class ListDataSource {
 				cursor.getInt(DbTableItems.COL_IDX_ID),
 				cursor.getInt(DbTableItems.COL_IDX_LIST_ID),
 				cursor.getString(DbTableItems.COL_IDX_NAME),
-				cursor.getInt(DbTableItems.COL_IDX_QUANTITY),
+				cursor.getDouble(DbTableItems.COL_IDX_QUANTITY),
 				QuantityType.fromString(cursor.getString(DbTableItems.COL_IDX_QUANTITY_TYPE)),
 				cursor.getInt(DbTableItems.COL_IDX_IS_COMPLETE) > 0);
 	}

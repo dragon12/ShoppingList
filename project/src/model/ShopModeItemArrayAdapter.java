@@ -29,7 +29,15 @@ public class ShopModeItemArrayAdapter
 			
 			if (itemQuantity != null) {
 				String displayName = item.getQuantityType().getDisplayName();
-				itemQuantity.setText(item.getQuantity() + (displayName.length() > 0 ? " " + displayName : ""));
+				StringBuilder displayQty = new StringBuilder(item.getQuantity().toString());
+				if (displayQty.substring(displayQty.length() - 2).equals(".0")) {
+					displayQty = displayQty.delete(displayQty.length() - 2, displayQty.length());
+				}
+				if (displayName.length() > 0) {
+					displayQty = displayQty.append(" ").append(displayName); 
+				}
+				
+				itemQuantity.setText(displayQty.toString());
 			}
 			
 			if (itemName != null){
@@ -40,7 +48,7 @@ public class ShopModeItemArrayAdapter
 				final int thisPosition = position;
 				itemDone.setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
-						Button box = (Button)v.findViewById(R.id.item_row_item_done);
+						//Button box = (Button)v.findViewById(R.id.item_row_item_done);
 						listenerCb.statusChanged(thisPosition, v, true); 
 					}
 				});

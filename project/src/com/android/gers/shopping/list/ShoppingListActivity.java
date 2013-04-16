@@ -1,6 +1,5 @@
 package com.android.gers.shopping.list;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import com.android.gers.shopping.list.DB.DbTableItems;
 import com.android.gers.shopping.list.DB.ShoppingListDb;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -42,7 +42,11 @@ public class ShoppingListActivity
 	
 	private static final int DIALOG_ID_LIST_EDIT_NAME = 1;
 	private static final int DIALOG_ID_LIST_CLONE = 2;
+	private static final int DIALOG_ID_EXPORT = 3;
+	private static final int DIALOG_ID_IMPORT = 4;
 	
+	private static final String BACKUP_FILE_NAME = "shoppingListBackup.xml";
+			
 	private enum EditDialogState {
 		NONE,
 		ADD,
@@ -164,12 +168,16 @@ public class ShoppingListActivity
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId())
 		{
-			case R.id.menu_reset_to_test_db:
-				resetToTestDb();
-				return true;
-			
 			case R.id.menu_add_list:
 				displayAddListDialog();
+				return true;
+				
+			case R.id.menu_export:
+				displayExportDialog();
+				return true;
+		
+			case R.id.menu_import:
+				displayImportDialog();
 				return true;
 				
 			default:
@@ -206,6 +214,16 @@ public class ShoppingListActivity
 		Log.d(ShoppingList.LOG_NAME, "displayAddListDialog");
 		editDialogState = EditDialogState.ADD;
 		showListNameEditDialog("Add New List");
+	}
+	
+	private void displayExportDialog() {
+		Log.d(ShoppingList.LOG_NAME, "displayExportDialog");
+		SimpleInputDialog.SimpleInputDialogBuilder(this,  this,  DIALOG_ID_EXPORT,  "Export data", "Exporting data will overwrite previously-exported data!", null);
+	}
+	
+	private void displayImportDialog() {
+		Log.d(ShoppingList.LOG_NAME, "displayExportDialog");
+		SimpleInputDialog.SimpleInputDialogBuilder(this,  this,  DIALOG_ID_IMPORT,  "Import data", "Importing data will overwrite all current data!", null);
 	}
 	
 	private void displayRenameDialog(ShoppingListList listChosen) {
@@ -262,7 +280,7 @@ public class ShoppingListActivity
     					} 
     					else if (editDialogState == EditDialogState.RENAME) {
     		        		//update the item that was selected for editing
-    		        		if (listBeingModified.getName() != valueEntered) {
+    		        		if (!listBeingModified.getName().equals(valueEntered)) {
 	    		        		ShoppingListList renamedList = new ShoppingListList(listBeingModified);
 	    		        		renamedList.setName(valueEntered);
 	    		        		
@@ -315,7 +333,30 @@ public class ShoppingListActivity
     						Toast.makeText(this, "Failed to clone list", Toast.LENGTH_SHORT).show();
     					}
     					break;
+    				
+    				case DIALOG_ID_EXPORT:
+    					Log.i(ShoppingList.LOG_NAME, "User wanted to export");
+    					String outputFile = Environment.getExternalStorageDirectory() + "/" + BACKUP_FILE_NAME;
+    					if (dbHelper.exportDbAsXml(outputFile)) {
+    						Toast.makeText(this, "Data exported to " + outputFile, Toast.LENGTH_LONG).show();
+    					} else {
+    						Toast.makeText(this, "Export failed to " + outputFile + "!", Toast.LENGTH_LONG).show();
+    					}
+    					break;
 
+    				case DIALOG_ID_IMPORT:
+    					Log.i(ShoppingList.LOG_NAME, "User wanted to import");
+    					String inputFile = Environment.getExternalStorageDirectory() + "/" + BACKUP_FILE_NAME;
+    					try {
+    						dbHelper.importDbAsXml(inputFile);
+    						Toast.makeText(this, "Data imported from " + inputFile, Toast.LENGTH_LONG).show();
+    						reloadListDisplay();
+    					} catch (Exception e) {
+    						Log.e(ShoppingList.LOG_NAME, "Import failed with error: " + e);
+    						Toast.makeText(this, "Import failed from " + inputFile + ": " + e + "!", Toast.LENGTH_LONG).show();
+    					}
+    					break;
+    					
     				default:
     					Log.e(ShoppingList.LOG_NAME, "Saw bad id in ButtonClicked: " + id);
     					break;
@@ -330,7 +371,7 @@ public class ShoppingListActivity
 		editDialogState = EditDialogState.NONE;
 	}
 		
-	
+	/*
 	private void resetToTestDb() {
 		Log.w(ShoppingList.LOG_NAME, "Resetting to test db!");
 		dataSource.close();
@@ -348,4 +389,5 @@ public class ShoppingListActivity
 		
 		reloadListDisplay();
 	}
+	*/
 }

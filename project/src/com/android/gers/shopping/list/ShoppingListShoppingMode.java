@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import model.BaseItemArrayAdapter;
-import model.QuantityType;
 import model.ShopModeItemArrayAdapter;
 import model.ShoppingListItem;
 import android.content.Context;
@@ -19,7 +18,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
 public class ShoppingListShoppingMode 
